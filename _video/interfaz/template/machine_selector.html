@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Selector - rt4all</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../template/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../template/css/style.css" rel="stylesheet">
+    <script src="../js/py_machine_selector.js"></script>
+</head>
+
+<body onload="load_machines()">
+
+<div class="container">
+
+    <img src="../template/assets/img/Bosch_logo.png" style="width: 98%;"></img>
+    <div class="form-signin">
+        <h2 class="form-signin-heading">Selecciona la máquina: </h2>
+        <select id="selector" class="form-control">
+        </select>
+        <hr> 
+
+        <button id="conectar_maquina" onClick="nuevaventana()" class="btn btn-lg btn-primary btn-block" type="submit" style="background-color: #33b768; border-color: #33b768;">Conectar</button>
+        <script type="text/javascript">
+            var {ipcRenderer} = require('electron');
+            function nuevaventana(){
+                console.log( "Boton pulsado" );
+
+                var sel = document.getElementById("selector");
+                var selection = sel.options[sel.selectedIndex].value;
+                console.log(selection);
+                ipcRenderer.send("new_machine_window", selection, "hola" );
+                //ipcRenderer.webContents.send( 'some-message' );
+            }
+        </script>
+    </div>
+
+</div> <!-- /container -->
+
+</body>
+</html>
