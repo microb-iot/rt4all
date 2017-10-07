@@ -22,8 +22,8 @@ app.on('ready', () => {
 ipcMain.on( "new_machine_window", ( e, arg ) => {
     //console.log(arg);
     var machine_window = new BrowserWindow({
-		height: 700,
-		width: 1200,
+		height: 500,
+		width: 800,
 		resizable: false
 	});
     //machine_window.webContents.send('data-id', arg);
