@@ -1,6 +1,10 @@
 var path = require('path');
+
 var PythonShell = require('python-shell');
-var script = "test.py"
+var options = {
+  pythonOptions: ['-u'],
+  scriptPath: __dirname+'/../scripts'
+};
 
 var machines_list = new Array();
 
@@ -16,7 +20,7 @@ function add_options(id,lista){
 function load_machines(){
   var nodeConsole = require('console');
   var myConsole = new nodeConsole.Console(process.stdout, process.stderr);
-  var pyshell = new PythonShell(script);
+  var pyshell = new PythonShell("test.py",options);
 
   //Recogida de los mensajes de el script
   pyshell.on('message', function (message) {

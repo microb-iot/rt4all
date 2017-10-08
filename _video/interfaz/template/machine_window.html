@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../template/css/bootstrap.min.css">
     <script src="../js/py_machine_window.js"></script>
   </head>
-  <body style="background-color:#eee" onload="fill_data()">
+  <body style="background-color:#eee" onload="get_data()">
     <div class="container">
 
       <div class="page-header" id="banner" style="margin:0">
@@ -23,47 +23,23 @@
         </div>
 
       </div>
-      <button id="boton camara" onclick="start_stream()">Conectar</button>
-      <button id="cerrar" onclick="stop_stream()">Cerrar</button>
-      
       <!-- Tables
       ================================================== -->
       <div class="bs-docs-section">
+        <div class="row">
+          <div class="col-md-5" style="padding-bottom: 15px">
+            <a id="boton camara" onclick="start_stream()" class="btn btn-success">Streaming</a>
+          </div>
+        </div>
 
         <div class="row">
-          <div class="col-lg-6">
-            <div class="page-header">
-              <h1 id="tables">Sensores</h1>
-            </div>
-            <div class="bs-component">
-              <table class="table table-striped table-hover ">
-                <thead>
-                  <tr>
-                    <th>Id</th>
-                    <th>Nombre</th>
-                    <th>Valor</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Presion</td>
-                    <td id="pressure_sensor_1"></td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Velocidad</td>
-                    <td id="velocity_sensor_1"></td>
-                  </tr>
-                  <tr class="info">
-                    <td>3</td>
-                    <td>Temperatura</td>
-                    <td id="temperature_sensor_1"></td>
-                  </tr>
-                </tbody>
-              </table> 
-            </div><!-- /example -->
+          <div id="data_alert" class="alert alert-dismissible alert-warning">
+                <h4>Alerta</h4>
+                <p>No se reciben datos</p>
           </div>
+          <div id = "sensors_panel" class="col-xs-5">
+          </div>
+        </div>
           <!-- Modal de si hay camara o no -->
           <div class="col-lg-6">
 

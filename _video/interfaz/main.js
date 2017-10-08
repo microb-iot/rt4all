@@ -22,7 +22,7 @@ app.on('ready', () => {
 ipcMain.on( "new_machine_window", ( e, arg ) => {
     //console.log(arg);
     var machine_window = new BrowserWindow({
-		height: 500,
+		height: 900,
 		width: 800,
 		resizable: false
 	});
