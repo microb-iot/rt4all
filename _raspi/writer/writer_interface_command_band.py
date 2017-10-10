@@ -15,22 +15,17 @@ import socket
 import fcntl
 import struct
 
-def get_ip_address(ifname):
-	s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s', ifname[:15]))[20:24])
-
 
 
 connector = rti.Connector("MyParticipantLibrary::Infinity",
-                          filepath + "/../XML/machine.xml")
-outputDDS = connector.getOutput("MyPublisher::MyMachineWriter")
+                          filepath + "/../XML/band.xml")
+outputDDS = connector.getOutput("MyPublisher::MyBandWriter")
 equipo = socket.gethostname()
 print equipo
-machine_ip=get_ip_address('enp0s3')
-print machine_ip
+
 for i in range(1, 500):
-    outputDDS.instance.setString("machine", "robot")
-    outputDDS.instance.setNumber("machine_id", 0)
-    outputDDS.instance.setString("machine_ip", machine_ip)
+    outputDDS.instance.setBoolean("go", 0)
+    outputDDS.instance.setBoolean("back", 1)
+    outputDDS.instance.setNumber("band_id", 0)
     outputDDS.write()
     sleep(1)

@@ -31,20 +31,20 @@
     <!-- types -->
     <types>
 
-	   	<struct name="machines" extensibility="extensible">
-			<member name="machine"  id="0" stringMaxLength="128" type="string"/>
-			<member name="machine_id" id="1" type="short"/>
-			<member name="machine_ip" id="2" stringMaxLength="15" type="string" key="true"/>
+	   	<struct name="action_band" extensibility="extensible">
+			<member name="go"  id="0" type="boolean"/>  
+			<member name="back"  id="1" type="boolean"/>
+			<member name="band_id" id="2" type="short"/>
 
 		</struct>
     </types>
 
 
     <!-- Domain Library -->
-    <domain_library name="MyMachineDomainLibrary">
-        <domain name="MyMachinesDomain" domain_id="0">
-            <register_type name="machines"  type_ref="machines" />
-            <topic name="soc"    register_type_ref="machines"/>
+    <domain_library name="MyBandDomainLibrary">
+        <domain name="MyBandDomain" domain_id="0">
+            <register_type name="action_band"  type_ref="action_band" />
+            <topic name="band"    register_type_ref="action_band"/>
 
         </domain>
     </domain_library>
@@ -52,14 +52,14 @@
 
     <!-- Participant library -->
     <domain_participant_library name="MyParticipantLibrary">
-      <domain_participant name="Infinity" domain_ref="MyMachineDomainLibrary::MyMachinesDomain">
+      <domain_participant name="Infinity" domain_ref="MyBandDomainLibrary::MyBandDomain">
 
         <publisher name="MyPublisher">
-				  <data_writer name="MyMachineWriter" topic_ref="soc" />
+				  <data_writer name="MyBandWriter" topic_ref="band" />
         </publisher>
 
         <subscriber name="MySubscriber">
-          <data_reader name="MyMachineReader" topic_ref="soc" />
+          <data_reader name="MyBandReader" topic_ref="band" />
         </subscriber>
 
 		  </domain_participant>
