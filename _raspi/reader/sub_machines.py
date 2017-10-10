@@ -10,8 +10,8 @@ from sys import path as sysPath
 from os import path as osPath
 from time import sleep
 filepath = osPath.dirname(osPath.realpath(__file__))
-
 sysPath.append((filepath + "/../"))
+
 import rticonnextdds_connector as rti
 
 
@@ -25,12 +25,25 @@ for i in range(1, 500):
     numOfSamples = inputDDS.samples.getLength()
     for j in range(1, numOfSamples+1):
         if inputDDS.infos.isValid(j):
+<<<<<<< HEAD:_raspi/reader/sub_machines.py
             # Or you can just access the field directly
             machine = inputDDS.samples.getString(j, "machine")
             machine_id = inputDDS.samples.getNumber(j, "machine_id")
 	    machine_ip = inputDDS.samples.getString(j, "machine_ip")
             toPrint = "Machine: " + repr(machine) + " ID: " + repr(machine_id) + \
                       " IP: " + repr(machine_ip) 
+=======
+            # This gives you a dictionary
+            """sample = inputDDS.samples.getDictionary(j)
+            x = sample['x']
+            y = sample['y']"""
+
+            # Or you can just access the field directly
+            name = inputDDS.samples.getString(j, "machine")
+            machine_id = inputDDS.samples.getNumber(j, "machine_id")
+            machine_ip = inputDDS.samples.getString(j, "machine_ip")
+            toPrint = "Name: " + name + " Id: " + repr(machine_id) + " Ip: " + machine_ip 
+>>>>>>> 3ee02f596e07188ef51f5bba14c289955df20724:_raspi/reader/reader.py
 
             print(toPrint)
-    sleep(2)
+    sleep(1)
