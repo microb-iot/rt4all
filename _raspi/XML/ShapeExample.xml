@@ -15,7 +15,7 @@
 
     <!-- Qos Library -->
 	<qos_library name="QosLibrary">
-		<qos_profile name="DefaultProfile" 
+		<qos_profile name="DefaultProfile"
 				     base_name="BuiltinQosLibExp::Generic.StrictReliable"
 					 is_default_qos="true">
 			<participant_qos>

@@ -10,13 +10,14 @@ from sys import path as sysPath
 from os import path as osPath
 from time import sleep
 filepath = osPath.dirname(osPath.realpath(__file__))
-sysPath.append(filepath)
+
+sysPath.append((filepath + "/../"))
 import rticonnextdds_connector as rti
 
 
 
 connector = rti.Connector("MyParticipantLibrary::Zero",
-                          filepath + "/XML/ShapeExample.xml")
+                          filepath + "/../XML/ShapeExample.xml")
 inputDDS = connector.getInput("MySubscriber::MySquareReader")
 
 for i in range(1, 500):
