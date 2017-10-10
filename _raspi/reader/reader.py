@@ -10,15 +10,15 @@ from sys import path as sysPath
 from os import path as osPath
 from time import sleep
 filepath = osPath.dirname(osPath.realpath(__file__))
-
 sysPath.append((filepath + "/../"))
+
 import rticonnextdds_connector as rti
 
 
 
-connector = rti.Connector("MyParticipantLibrary::Zero",
-                          filepath + "/../XML/ShapeExample.xml")
-inputDDS = connector.getInput("MySubscriber::MySquareReader")
+connector = rti.Connector("MyParticipantLibrary::Infinity",
+                          filepath + "/../XML/machine.xml")
+inputDDS = connector.getInput("MySubscriber::MyMachineReader")
 
 for i in range(1, 500):
     inputDDS.take()
@@ -26,15 +26,15 @@ for i in range(1, 500):
     for j in range(1, numOfSamples+1):
         if inputDDS.infos.isValid(j):
             # This gives you a dictionary
-            sample = inputDDS.samples.getDictionary(j)
+            """sample = inputDDS.samples.getDictionary(j)
             x = sample['x']
-            y = sample['y']
+            y = sample['y']"""
 
             # Or you can just access the field directly
-            size = inputDDS.samples.getNumber(j, "shapesize")
-            color = inputDDS.samples.getString(j, "color")
-            toPrint = "Received x: " + repr(x) + " y: " + repr(y) + \
-                      " size: " + repr(size) + " color: " + repr(color)
+            name = inputDDS.samples.getString(j, "machine")
+            machine_id = inputDDS.samples.getNumber(j, "machine_id")
+            machine_ip = inputDDS.samples.getString(j, "machine_ip")
+            toPrint = "Name: " + name + " Id: " + repr(machine_id) + " Ip: " + machine_ip 
 
             print(toPrint)
-    sleep(2)
+    sleep(1)
