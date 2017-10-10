@@ -75,7 +75,6 @@ function delete_alert(){
 }
 
 //Send data functions
-
 function send_key_pressed(key_pressed){
 	var pyshell_send = new PythonShell('test3.py',options);
 	pyshell_send.send("Tecla pulsada: " + key_pressed);
@@ -89,8 +88,6 @@ function send_key_pressed(key_pressed){
   	if (err) throw err;
   		myConsole.log('Finish send');
 	});
-
-
 }
 
 //Streaming functions
