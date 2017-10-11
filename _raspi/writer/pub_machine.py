@@ -26,7 +26,7 @@ connector = rti.Connector("MyParticipantLibrary::Infinity",
 outputDDS = connector.getOutput("MyPublisher::MyMachineWriter")
 equipo = socket.gethostname()
 print equipo
-machine_ip=get_ip_address('wlp3s0')
+machine_ip=get_ip_address('enp0s3')
 print machine_ip
 for i in range(1, 500):
     outputDDS.instance.setString("machine", "robot")
