@@ -12,8 +12,8 @@ import rticonnextdds_connector as rti
 
 
 connector = rti.Connector("MyParticipantLibrary::Infinity",
-                          filepath + "/../XML/band.xml")
-inputDDS = connector.getInput("MySubscriber::MyBandReader")
+                          filepath + "/../XML/robot.xml")
+inputDDS = connector.getInput("MySubscriber::MyRobotReader")
 
 for i in range(1, 500):
     inputDDS.take()
@@ -23,10 +23,11 @@ for i in range(1, 500):
           
 
             # Or you can just access the field directly
-            go = inputDDS.samples.getBoolean(j, "go")
-            back = inputDDS.samples.getBoolean(j, "back")
-	    band_id = inputDDS.samples.getString(j, "band_id")
-            toPrint ="ID: " + repr(band_id) + " Received go: " + repr(go) + " back: " + repr(back)
+            temperature = inputDDS.samples.getNumber(j, "temperature")
+            humidity = inputDDS.samples.getNumber(j, "humidity")
+	    robot_id = inputDDS.samples.getNumber(j, "robot_id")
+	    servo_angle_position=inputDDS.samples.getNumber(j, "servo_angle_position")
+            toPrint ="ID: " + repr(int(robot_id)) + " Received temperature: " + repr(temperature) + " humidity: " + repr(humidity) + " servo_angle_position: " + repr(servo_angle_position)
 
             print(toPrint)
     sleep(2)
