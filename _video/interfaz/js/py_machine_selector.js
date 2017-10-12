@@ -3,41 +3,56 @@ var path = require('path');
 var PythonShell = require('python-shell');
 var options = {
   pythonOptions: ['-u'],
-  scriptPath: __dirname+'/../scripts'
+  scriptPath: __dirname+'/../scripts/reader/'
 };
+
+var nodeConsole = require('console');
+var myConsole = new nodeConsole.Console(process.stdout, process.stderr);
 
 var machines_list = new Array();
 
-function add_options(id,lista){
-  var selector = document.getElementById(id);
-  for (i = 0; i < lista.length; i++) {
+function add_option(id,message){
+  myConsole.log("Lista actual: " + machines_list);;
+    var selector = document.getElementById(id);
     var option = document.createElement("option");
-    option.text = lista[i].toString();
+    option.text = message["machine"].toString() +" - " +  message["machine_id"].toString();
+    myConsole.log(message["machine"].toString());
+    val = message["machine_id"].toString() + ";" + message["machine_ip"].toString();
+    myConsole.log(val);
+    option.value = val;
     selector.add(option);
-  }  
 }
 
 function load_machines(){
-  var nodeConsole = require('console');
-  var myConsole = new nodeConsole.Console(process.stdout, process.stderr);
-  var pyshell = new PythonShell("test.py",options);
-
+  var pyshell = new PythonShell("sub_machines.py",options);
   //Recogida de los mensajes de el script
   pyshell.on('message', function (message) {
-    myConsole.log(message);
-    machines_list.push(message.toString());
+      myConsole.log("GITANO");
+    message_received = JSON.parse(message.replace(/'/g, '"'));
+    if(machines_list.indexOf(message_received["machine_ip"].toString()) == -1){
+      machines_list.push(message_received["machine_ip"].toString());
+      add_option("selector",message_received);
+    }
   });
 
   //Termina el proceso python
   pyshell.end(function (err) {
     if (err){
         throw err;
-    };
-    add_options("selector",machines_list);
+  };
     document.getElementById("loader").style.display = "none";
     document.getElementById("form_selector").style.display = "block";
+    document.getElementById("recharge_icon").style.display = "none";
     myConsole.log('finished');
   });
 
+}
+
+function recharge(){
+  document.getElementById('selector').options.length = 0;
+  machines_list = new Array();
+
+  document.getElementById("recharge_icon").style.display = "inherit";
+  load_machines();
 }
 
