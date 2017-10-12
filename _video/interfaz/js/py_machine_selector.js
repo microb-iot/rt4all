@@ -34,6 +34,8 @@ function load_machines(){
         throw err;
     };
     add_options("selector",machines_list);
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("form_selector").style.display = "block";
     myConsole.log('finished');
   });
 

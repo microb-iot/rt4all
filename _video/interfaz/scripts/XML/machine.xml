@@ -33,7 +33,7 @@
 
 	   	<struct name="machines" extensibility="extensible">
 			<member name="machine"  id="0" stringMaxLength="128" type="string"/>
-			<member name="machine_id" id="1" type="short"/>
+			<member name="machine_id" id="1" type="long"/>
 			<member name="machine_ip" id="2" stringMaxLength="15" type="string" key="true"/>
 
 		</struct>

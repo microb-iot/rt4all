@@ -3,7 +3,7 @@ var create  = 0;
 var PythonShell = require('python-shell');
 var options = {
   pythonOptions: ['-u'],
-  scriptPath: __dirname+'/../scripts'
+  scriptPath: __dirname+'/../scripts/'
 };
 
 var nodeConsole = require('console');
@@ -12,7 +12,8 @@ var myConsole = new nodeConsole.Console(process.stdout, process.stderr);
 var exec = require('child_process').exec;
 var stream;
 
-var key_list = ["w","a","s","d"];
+var key_list = ["W","A","S","D"];
+var key_unpressed = ".";
 
 //DOM functions
 
@@ -22,14 +23,20 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById("machine_title").innerHTML = "Maquina " + id[1];
 })
 
-document.onkeypress = function(evt) {
+document.onkeydown = function(evt) {
     evt = evt || window.event;
     var charCode = evt.keyCode || evt.which;
     var key_pressed = String.fromCharCode(charCode);
-
     if(key_list.indexOf(key_pressed) != -1){
    		send_key_pressed(key_pressed);
    	}
+}
+
+document.onkeyup = function(evt) {
+    evt = evt || window.event;
+    var charCode = evt.keyCode || evt.which;
+    var key_pressed = String.fromCharCode(charCode);
+   	send_key_pressed(key_unpressed);
 }
 
 //Fill data functions
@@ -55,6 +62,7 @@ function get_data(){
 function create_panels(message_received){
 	delete_alert();
 	message_received = JSON.parse(message_received.replace(/'/g, '"'));
+	myConsole.log(message_received);
 	for (var key in message_received){
 			document.getElementById("sensors_panel").innerHTML += '<div class="panel panel-default"><div class="panel-heading">'+key+'</div><div class="panel-body" id="'+key+'"></div></div><hr>';
     }
