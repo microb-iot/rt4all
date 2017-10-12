@@ -11,6 +11,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="../template/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- Custom styles for this template -->
     <link href="../template/css/style.css" rel="stylesheet">
@@ -25,22 +26,16 @@
     <div class="row">
         <div id="loader">
         </div>
-        <!--<div class="col-xs-12">
-            <h4>GITNAO</h4>
-            <div id="loader2" class="spinner">
-                <div class="rect1"></div>
-                <div class="rect2"></div>
-                <div class="rect3"></div>
-                <div class="rect4"></div>
-                <div class="rect5"></div>
-            </div>
-        </div>-->
     </div>
     <div class="row">
         <div id="form_selector" class="form-signin animate-bottom">
             <h2>Selecciona la máquina</h2>
-            <select id="selector" class="form-control">
-            </select>
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <button id="recharge_button" onclick="recharge()" class="btn btn-primary" type="button" style="padding-top: 10px;padding-bottom: 9px;"><i id="recharge_icon" class="fa fa-circle-o-notch fa-spin" style="display:none"></i> Recargar</button>
+                </span>
+                <select id="selector" class="form-control"></select>
+            </div>
             <br> 
             <button id="conectar_maquina" onClick="nuevaventana()" class="btn btn-lg btn-primary btn-block" type="submit" style="background-color: #33b768; border-color: #33b768;">Conectar</button>
             <script type="text/javascript">
