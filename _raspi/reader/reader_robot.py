@@ -23,11 +23,12 @@ for i in range(1, 500):
           
 
             # Or you can just access the field directly
+	    cam = inputDDS.samples.getBoolean(j, "cam")
             temperature = inputDDS.samples.getNumber(j, "temperature")
             humidity = inputDDS.samples.getNumber(j, "humidity")
 	    robot_id = inputDDS.samples.getNumber(j, "robot_id")
 	    servo_angle_position=inputDDS.samples.getNumber(j, "servo_angle_position")
-            toPrint ="ID: " + repr(int(robot_id)) + " Received temperature: " + repr(temperature) + " humidity: " + repr(humidity) + " servo_angle_position: " + repr(servo_angle_position)
+            toPrint ="Camera: " + repr(cam) + " ID: " + repr(int(robot_id)) + " Received temperature: " + repr(temperature) + " humidity: " + repr(humidity) + " servo_angle_position: " + repr(servo_angle_position)
 
             print(toPrint)
     sleep(2)

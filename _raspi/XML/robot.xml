@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 
+
 <dds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="http://community.rti.com/schema/5.1.0/rti_dds_profiles.xsd" version="5.1.0">
 
@@ -21,20 +22,22 @@
     <!-- types -->
     <types>
 
-	   	<struct name="action_band" extensibility="extensible">
-			<member name="go"  id="0" type="boolean"/>  
-			<member name="back"  id="1" type="boolean"/>
-			<member name="band_id" id="2" type="short"/>
+	   	<struct name="robot_environment_variables" extensibility="extensible">
+			<member name="cam"  id="0" type="boolean"/>
+			<member name="temperature"  id="1" type="long"/>
+			<member name="humidity"  id="2" type="long"/>  
+			<member name="servo_angle_position"  id="3" type="long"/>  
+			<member name="robot_id" id="4" type="short"/>
 
 		</struct>
     </types>
 
 
     <!-- Domain Library -->
-    <domain_library name="MyBandDomainLibrary">
-        <domain name="MyBandDomain" domain_id="0">
-            <register_type name="action_band"  type_ref="action_band" />
-            <topic name="band"    register_type_ref="action_band"/>
+    <domain_library name="MyRobotDomainLibrary">
+        <domain name="MyRobotDomain" domain_id="0">
+            <register_type name="robot_environment_variables"  type_ref="robot_environment_variables" />
+            <topic name="robot"    register_type_ref="robot_environment_variables"/>
 
         </domain>
     </domain_library>
@@ -42,14 +45,14 @@
 
     <!-- Participant library -->
     <domain_participant_library name="MyParticipantLibrary">
-      <domain_participant name="Infinity" domain_ref="MyBandDomainLibrary::MyBandDomain">
+      <domain_participant name="Infinity" domain_ref="MyRobotDomainLibrary::MyRobotDomain">
 
         <publisher name="MyPublisher">
-				  <data_writer name="MyBandWriter" topic_ref="band" />
+				  <data_writer name="MyRobotWriter" topic_ref="robot" />
         </publisher>
 
         <subscriber name="MySubscriber">
-          <data_reader name="MyBandReader" topic_ref="band" />
+          <data_reader name="MyRobotReader" topic_ref="robot" />
         </subscriber>
 
 		  </domain_participant>

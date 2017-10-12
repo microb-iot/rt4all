@@ -25,14 +25,14 @@ for i in range(1, 500):
     numOfSamples = inputDDS.samples.getLength()
     for j in range(1, numOfSamples+1):
         if inputDDS.infos.isValid(j):
-<<<<<<< HEAD:_raspi/reader/sub_machines.py
+
             # Or you can just access the field directly
             machine = inputDDS.samples.getString(j, "machine")
             machine_id = inputDDS.samples.getNumber(j, "machine_id")
 	    machine_ip = inputDDS.samples.getString(j, "machine_ip")
             toPrint = "Machine: " + repr(machine) + " ID: " + repr(machine_id) + \
                       " IP: " + repr(machine_ip) 
-=======
+
             # This gives you a dictionary
             """sample = inputDDS.samples.getDictionary(j)
             x = sample['x']
@@ -43,7 +43,7 @@ for i in range(1, 500):
             machine_id = inputDDS.samples.getNumber(j, "machine_id")
             machine_ip = inputDDS.samples.getString(j, "machine_ip")
             toPrint = "Name: " + name + " Id: " + repr(machine_id) + " Ip: " + machine_ip 
->>>>>>> 3ee02f596e07188ef51f5bba14c289955df20724:_raspi/reader/reader.py
+
 
             print(toPrint)
     sleep(1)
