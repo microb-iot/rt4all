@@ -34,11 +34,11 @@
 	   	<struct name="action_robot" extensibility="extensible">
 			<member name="go" id="0" type="boolean"/>
 			<member name="back" id="1" type="boolean"/> 
-			<member name="left" id="0" type="boolean"/>
-			<member name="right" id="0" type="boolean"/>
-			<member name="scoop" id="0" type="boolean"/>
-			<member name="cam_l" id="0" type="boolean"/>
-			<member name="cam_r" id="0" type="boolean"/>
+			<member name="left" id="2" type="boolean"/>
+			<member name="right" id="3" type="boolean"/>
+			<member name="scoop" id="4" type="boolean"/>
+			<member name="cam_l" id="5" type="boolean"/>
+			<member name="cam_r" id="6" type="boolean"/>
 		</struct>
     </types>
 
