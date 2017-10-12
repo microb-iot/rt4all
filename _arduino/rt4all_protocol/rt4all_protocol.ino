@@ -66,6 +66,7 @@ unsigned int holdingRegs[2];
 // the setup routine runs once when you press reset:
 void setup() {                
   // initialize the digital pin as an output.
+   
    modbus_configure(9600, 1, 2, 2, 0);
   pinMode(led, OUTPUT);     
 }
@@ -87,7 +88,7 @@ unsigned int slave_update(unsigned int *holdingRegs)
   while (Serial.available())
 
   {
-    Serial.print("tengo un caracter");
+    
 
     // The maximum number of bytes is limited to the serial buffer size of 128 bytes
 
@@ -136,7 +137,7 @@ unsigned int slave_update(unsigned int *holdingRegs)
   if (buffer > 4) 
 
   {
-
+    Serial.print("recibido");
     unsigned char id = frame[0];
 
     
@@ -151,7 +152,7 @@ unsigned int slave_update(unsigned int *holdingRegs)
 
     
 
-    if (id == 'c' || broadcastFlag) // if the recieved ID matches the slaveID or broadcasting id (0), continue
+    if (id == slaveID || broadcastFlag) // if the recieved ID matches the slaveID or broadcasting id (0), continue
 
     {
 
@@ -169,11 +170,6 @@ unsigned int slave_update(unsigned int *holdingRegs)
 
         unsigned char address;
 
-        unsigned int crc16;
-
-        
-
-        // broadcasting is not supported for function 3 
 
         if (!broadcastFlag && (function == 3))
 
@@ -219,13 +215,7 @@ unsigned int slave_update(unsigned int *holdingRegs)
 
               } 
 
-              
-
-              crc16 = calculateCRC(responseFrameSize - 2);
-
-              frame[responseFrameSize - 2] = crc16 >> 8; // split crc into 2 bytes
-
-              frame[responseFrameSize - 1] = crc16 & 0xFF;
+            
 
               sendPacket(responseFrameSize);
 
@@ -260,14 +250,6 @@ unsigned int slave_update(unsigned int *holdingRegs)
               
 
               holdingRegs[startingAddress] = regStatus;
-
-              
-
-              crc16 = calculateCRC(responseFrameSize - 2);
-
-              frame[responseFrameSize - 2] = crc16 >> 8; // split crc into 2 bytes
-
-              frame[responseFrameSize - 1] = crc16 & 0xFF;
 
               sendPacket(responseFrameSize);
 
@@ -312,16 +294,6 @@ unsigned int slave_update(unsigned int *holdingRegs)
                   address += 2;
 
                 } 
-
-                
-
-                // only the first 6 bytes are used for CRC calculation
-
-                crc16 = calculateCRC(6); 
-
-                frame[6] = crc16 >> 8; // split crc into 2 bytes
-
-                frame[7] = crc16 & 0xFF;
 
                 
 
