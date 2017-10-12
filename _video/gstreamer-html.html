@@ -20,6 +20,15 @@ gst-launch-1.0 \
 
 ->
 
+<!--
+gst-launch-1.0 \
+        v4l2src device=raspivid \
+        ! videoconvert ! videoscale ! video/x-raw,width=320,height=240 \
+        ! clockoverlay shaded-background=true font-desc="Sans 38" \
+! theoraenc ! oggmux ! tcpserversink host=192.168.1.138 port=8080
+
+->
+
 <!--<html>
     <title>A simple HTML5 video test</title>
 </html>
