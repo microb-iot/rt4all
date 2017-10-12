@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!--
+
+ -->
+
+<dds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="http://community.rti.com/schema/5.1.0/rti_dds_profiles.xsd" version="5.1.0">
+
+    <!-- Qos Library -->
+	<qos_library name="QosLibrary">
+		<qos_profile name="DefaultProfile"
+				     base_name="BuiltinQosLibExp::Generic.StrictReliable"
+					 is_default_qos="true">
+			<participant_qos>
+				<transport_builtin>
+				    <mask>UDPV4 | SHMEM</mask>
+				</transport_builtin>
+
+				<!-- Turn on monitoring -->
+				<!-- Begin Monitoring
+				<property>
+					<value>
+						<element>
+							<name>rti.monitor.library</name>
+							<value>rtimonitoring</value>
+						</element>
+						<element>
+							<name>rti.monitor.create_function_ptr</name>
+							<value>$(NDDS_MONITOR)</value>
+						</element>
+					</value>
+				</property>
+				 End Monitoring -->
+			</participant_qos>
+		</qos_profile>
+	</qos_library>
+
+    <!-- types -->
+    <types>
+
+	   	<struct name="machines" extensibility="extensible">
+			<member name="machine"  id="0" stringMaxLength="128" type="string"/>
+			<member name="machine_id" id="1" type="long"/>
+			<member name="machine_ip" id="2" stringMaxLength="15" type="string" key="true"/>
+
+		</struct>
+		
+    </types>
+
+
+    <!-- Domain Library -->
+    <domain_library name="MyDomainLibrary">
+        <domain name="MyDomain" domain_id="0">
+            <register_type name="machines"  type_ref="machines" />
+            <topic name="soc"    register_type_ref="machines"/>
+
+        </domain>
+    </domain_library>
+
+
+    <!-- Participant library -->
+    <domain_participant_library name="MyMachinesLibrary">
+      <domain_participant name="Infinty" domain_ref="MyDomainLibrary::MyDomain">
+
+        <publisher name="MyMachinePublisher">
+				  <data_writer name="MyMachineWriter" topic_ref="soc" />
+        </publisher>
+
+        <subscriber name="MyMachineSubscriber">
+          <data_reader name="MyMachineReader" topic_ref="soc" />
+        </subscriber>
+
+		  </domain_participant>
+   </domain_participant_library>
+</dds>
