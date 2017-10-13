@@ -27,6 +27,7 @@ ipcMain.on( "new_machine_window", ( e, arg ) => {
 		resizable: false
 	});
     //machine_window.webContents.send('data-id', arg);
-	machine_window.loadURL('file://' + __dirname + '/template/machine_window.html?id='+arg);
+	machine_window.loadURL('file://' + __dirname + '/template/machine_window.html?'+arg);
+	machine_window.webContents.openDevTools();
 	machine_window.setPosition(400,5);
 } );
