@@ -1,0 +1,15 @@
+{
+  "name": "rt4all",
+  "version": "0.1.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^1.7.8"
+  },
+  "dependencies": {
+    "socket.io": "^2.0.3",
+    "zerorpc": "^0.9.7"
+  }
+}

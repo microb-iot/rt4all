@@ -11,7 +11,7 @@
  -->
 
 <dds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="http://community.rti.com/schema/5.1.0/rti_dds_profiles.xsd" version="5.1.0">
+  xsi:noNamespaceSchemaLocation="http://community.rti.com/schema/5.1.0/rti_dds_profiles.xsd" version="5.3.0">
 
     <!-- Qos Library -->
 	<qos_library name="QosLibrary">
@@ -25,6 +25,12 @@
 				</transport_builtin>
 
 			</participant_qos>
+			<datareader_qos>
+				<history>
+					<depth>2</depth>
+				</history>
+				
+			</datareader_qos>
 		</qos_profile>
 	</qos_library>
 
@@ -32,20 +38,20 @@
     <types>
 
 	   	<struct name="action_robot" extensibility="extensible">
-			<member name="go" id="0" type="boolean"/>
+			<member name="go" id="0" type="boolean" key="true"/>
 			<member name="back" id="1" type="boolean"/> 
-			<member name="left" id="0" type="boolean"/>
-			<member name="right" id="0" type="boolean"/>
-			<member name="scoop" id="0" type="boolean"/>
-			<member name="cam_l" id="0" type="boolean"/>
-			<member name="cam_r" id="0" type="boolean"/>
+			<member name="left" id="2" type="boolean"/>
+			<member name="right" id="3" type="boolean"/>
+			<member name="scoop" id="4" type="boolean"/>
+			<member name="cam_l" id="5" type="boolean"/>
+			<member name="cam_r" id="6" type="boolean"/>
 		</struct>
     </types>
 
 
     <!-- Domain Library -->
     <domain_library name="MyActionRobotDomainLibrary">
-        <domain name="MyRobotActionDomain" domain_id="0">
+        <domain name="MyActionRobotDomain" domain_id="0">
             <register_type name="action_robot"  type_ref="action_robot" />
             <topic name="soc"    register_type_ref="action_robot"/>
 
@@ -55,14 +61,14 @@
 
     <!-- Participant library -->
     <domain_participant_library name="MyParticipantLibrary">
-      <domain_participant name="Infinity" domain_ref="MyActionRobotLibrary::MyActionRobotDomain">
+      <domain_participant name="Infinity" domain_ref="MyActionRobotDomainLibrary::MyActionRobotDomain">
 
         <publisher name="MyPublisher">
-				  <data_writer name="MyActionRobotWriter" topic_ref="soc" />
+			<data_writer name="MyActionRobotWriter" topic_ref="soc" />
         </publisher>
 
         <subscriber name="MySubscriber">
-          <data_reader name="MyActionRobotReader" topic_ref="soc" />
+			<data_reader name="MyActionRobotReader" topic_ref="soc" />
         </subscriber>
 
 		  </domain_participant>

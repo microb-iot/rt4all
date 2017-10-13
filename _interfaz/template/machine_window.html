@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title id="machine_window_title">Machine window - rt4all</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="./bootstrap.css" media="screen">
+    <link rel="stylesheet" href="../template/css/bootstrap.min.css">
+    <script src="../js/py_machine_window.js"></script>
+  </head>
+  <body style="background-color:#eee" onload="">
+    <div class="container">
+
+      <div class="page-header" id="banner" style="margin:0">
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-6">
+            <h1 id="machine_title"></h1>
+            <p class="lead">Data</p>
+          </div>
+          <div class="col-lg-4 col-md-5 col-sm-6">
+          </div>
+        </div>
+
+      </div>
+      <!-- Tables
+      ================================================== -->
+      <div class="bs-docs-section">
+        <div class="row">
+          <div class="col-md-5" style="padding-bottom: 15px">
+            <a id="boton camara" onclick="start_stream()" class="btn btn-success">Streaming</a>
+          </div>
+        </div>
+
+        <div class="row">
+          <div id="data_alert" class="alert alert-dismissible alert-warning">
+                <h4>Alerta</h4>
+                <p>No se reciben datos</p>
+          </div>
+          <div id = "sensors_panel" class="col-xs-5">
+          </div>
+        </div>
+          <!-- Modal de si hay camara o no -->
+          <div class="col-lg-6">
+
+          </div>
+        </div>
+      </div>
+
+      <footer>
+      </footer>
+
+    </div>
+  </body>
+</html>

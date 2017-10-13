@@ -36,6 +36,34 @@ RT4ALLSlave implements an unsigned int return value on a call to modbus_update()
 
 #define BUFFER_SIZE 128
 
+enum 
+{     
+  // just add or remove registers and your good to go...
+  // The first register starts at address 0
+  LED_STATE, // 0000h
+  temperature,// 0001h
+  humidity,//0002h
+  pos_servo,//0003h
+  vel_servo,//0004h
+  vel_motors,//0005h
+  GO,//0006h
+  BACK,//0007h
+  LEFT,//0008h
+  RIGTH,//0009h
+  CAM_L,//000Ah
+  CAM_R,//000Bh
+ 
+  TOTAL_ERRORS,
+  // leave this one
+  TOTAL_REGS_SIZE 
+  // total number of registers for function 3 and 16 share the same register array
+};
+
+int engine_l_f = 5;
+int engine_l_b = 6;
+int engine_r_f = 7;
+int engine_r_b = 8;
+unsigned int holdingRegs[TOTAL_REGS_SIZE];
 
 
 // frame[] is used to recieve and transmit packages. 
@@ -62,18 +90,46 @@ unsigned int T3_5; // frame delay
 
 
 int led = 13;
-unsigned int holdingRegs[2];
 // the setup routine runs once when you press reset:
 void setup() {                
   // initialize the digital pin as an output.
    
-   modbus_configure(9600, 1, 2, 2, 0);
-  pinMode(led, OUTPUT);     
+   modbus_configure(9600, 1, TOTAL_REGS_SIZE, 0);
+   holdingRegs[LED_STATE]=1;
+   holdingRegs[temperature]=7;
+   holdingRegs[vel_motors]=100;
+   
+  pinMode(led, OUTPUT);
+  pinMode(3,OUTPUT); 
+  pinMode(engine_l_f,OUTPUT);  
+  pinMode(engine_l_b,OUTPUT);  
+  pinMode(engine_r_f,OUTPUT);  
+  pinMode(engine_r_b,OUTPUT); 
+  
 }
+void go(int vel){
+    analogWrite(engine_l_b,0);  
+    analogWrite(engine_r_b,0);
+    analogWrite(engine_l_f,vel);  
+    analogWrite(engine_r_f,vel);
+}
+void _go(){
+    analogWrite(engine_l_b,0);  
+    analogWrite(engine_r_b,0);
+    analogWrite(engine_l_f,0);  
+    analogWrite(engine_r_f,0);
+}
+
 
 // the loop routine runs over and over again forever:
 void loop() {
   slave_update(holdingRegs);
+   if(holdingRegs[GO])    go(holdingRegs[vel_motors]);
+   else if(!holdingRegs[GO]){
+     _go();
+   }
+   
+     
 }
 
 unsigned int slave_update(unsigned int *holdingRegs)
@@ -104,9 +160,9 @@ unsigned int slave_update(unsigned int *holdingRegs)
 
     {
 
-      if (buffer == BUFFER_SIZE)
+      if (buffer == BUFFER_SIZE) overflow = 1;
 
-        overflow = 1;
+        
 
       frame[buffer] = Serial.read();
 
@@ -134,10 +190,9 @@ unsigned int slave_update(unsigned int *holdingRegs)
 
   // The minimum request packet is 8 bytes for function 3 & 16
 
-  if (buffer > 4) 
+  if (buffer > 5) 
 
   {
-    Serial.print("recibido");
     unsigned char id = frame[0];
 
     
@@ -156,7 +211,6 @@ unsigned int slave_update(unsigned int *holdingRegs)
 
     {
 
-        Serial.print("sclavo correcto");
 
         function = frame[1];
 
@@ -185,7 +239,7 @@ unsigned int slave_update(unsigned int *holdingRegs)
 
               unsigned char noOfBytes = no_of_registers * 2;
 
-              unsigned char responseFrameSize = 5 + noOfBytes; // ID, function, noOfBytes, (dataLo + dataHi) * number of registers, crcLo, crcHi
+              unsigned char responseFrameSize = 3 + noOfBytes; // ID, function, noOfBytes, (dataLo + dataHi) * number of registers, crcLo, crcHi
 
               frame[0] = slaveID;
 
@@ -245,7 +299,7 @@ unsigned int slave_update(unsigned int *holdingRegs)
 
               unsigned int regStatus = ((frame[4] << 8) | frame[5]);
 
-              unsigned char responseFrameSize = 8;
+              unsigned char responseFrameSize = 6;
 
               
 
@@ -261,72 +315,7 @@ unsigned int slave_update(unsigned int *holdingRegs)
 
           }
 
-        else if (function == 16)
-
-        {
-
-          // check if the recieved number of bytes matches the calculated bytes minus the request bytes
-
-          // id + function + (2 * address bytes) + (2 * no of register bytes) + byte count + (2 * CRC bytes) = 9 bytes
-
-          if (frame[6] == (buffer - 9)) 
-
-          {
-
-            if (startingAddress < holdingRegsSize) // check exception 2 ILLEGAL DATA ADDRESS
-
-            {
-
-              if (maxData <= holdingRegsSize) // check exception 3 ILLEGAL DATA VALUE
-
-              {
-
-                address = 7; // start at the 8th byte in the frame
-
-                
-
-                for (index = startingAddress; index < maxData; index++)
-
-                {
-
-                  holdingRegs[index] = ((frame[address] << 8) | frame[address + 1]);
-
-                  address += 2;
-
-                } 
-
-                
-
-                // a function 16 response is an echo of the first 6 bytes from the request + 2 crc bytes
-
-                if (!broadcastFlag) // don't respond if it's a broadcast message
-
-                  sendPacket(8); 
-
-              }
-
-              else  
-
-                exceptionResponse(3); // exception 3 ILLEGAL DATA VALUE
-
-            }
-
-            else
-
-              exceptionResponse(2); // exception 2 ILLEGAL DATA ADDRESS
-
-          }
-
-          else 
-
-            errorCount++; // corrupted packet
-
-        }         
-
-        else
-
-          exceptionResponse(1); // exception 1 ILLEGAL FUNCTION
-
+        
     } // incorrect id
 
   }
@@ -359,13 +348,7 @@ void exceptionResponse(unsigned char exception)
 
     frame[2] = exception;
 
-    unsigned int crc16 = calculateCRC(3); // ID, function + 0x80, exception code == 3 bytes
-
-    frame[3] = crc16 >> 8;
-
-    frame[4] = crc16 & 0xFF;
-
-    sendPacket(5); // exception response is always 5 bytes ID, function + 0x80, exception code, 2 bytes crc
+    sendPacket(3); // exception response is always 3 bytes ID, function + 0x80, exception code, 2 bytes crc
 
   }
 
@@ -373,27 +356,13 @@ void exceptionResponse(unsigned char exception)
 
 
 
-void modbus_configure(long baud, unsigned char _slaveID, unsigned char _TxEnablePin, unsigned int _holdingRegsSize, unsigned char _lowLatency)
+void modbus_configure(long baud, unsigned char _slaveID, unsigned int _holdingRegsSize, unsigned char _lowLatency)
 
 {
 
   slaveID = _slaveID;
 
   Serial.begin(baud);
-
-  
-
-  if (_TxEnablePin > 1) 
-
-  { // pin 0 & pin 1 are reserved for RX/TX. To disable set txenpin < 2
-
-    TxEnablePin = _TxEnablePin; 
-
-    pinMode(TxEnablePin, OUTPUT);
-
-    digitalWrite(TxEnablePin, LOW);
-
-  }
 
   
 
