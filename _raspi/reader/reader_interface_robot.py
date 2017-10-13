@@ -11,25 +11,25 @@ import rticonnextdds_connector as rti
 
 
 
-connector = rti.Connector("MyParticipantLibrary::Zero",
-                          filepath + "/../XML/ShapeExample.xml")
-inputDDS = connector.getInput("MySubscriber::MySquareReader")
+connector = rti.Connector("MyParticipantLibrary::Infinity",
+                          filepath + "/../XML/action_robot.xml")
+inputDDS = connector.getInput("MySubscriber::MyActionRobotReader")
 
-for i in range(1, 500):
-    inputDDS.take()
-    numOfSamples = inputDDS.samples.getLength()
-    for j in range(1, numOfSamples+1):
-        if inputDDS.infos.isValid(j):
-            # This gives you a dictionary
-            sample = inputDDS.samples.getDictionary(j)
-            x = sample['x']
-            y = sample['y']
+while True:
+	
+	inputDDS.take()
+	numOfSamples = inputDDS.samples.getLength()
+	for j in range(1, numOfSamples+1):
+		if inputDDS.infos.isValid(j):
+			go = inputDDS.samples.getBoolean(j, "go")
+			back = inputDDS.samples.getBoolean(j, "back")
+			left = inputDDS.samples.getBoolean(j, "left")
+			right = inputDDS.samples.getBoolean(j, "right")
+			scoop = inputDDS.samples.getBoolean(j, "scoop")
+			cam_l = inputDDS.samples.getBoolean(j, "cam_l")
+			cam_r = inputDDS.samples.getBoolean(j, "cam_r")
+			
+			toPrint = "avanza: " + repr(go) + repr(back) + repr(left) + "samples: " + repr(numOfSamples)
 
-            # Or you can just access the field directly
-            size = inputDDS.samples.getNumber(j, "shapesize")
-            color = inputDDS.samples.getString(j, "color")
-            toPrint = "Received x: " + repr(x) + " y: " + repr(y) + \
-                      " size: " + repr(size) + " color: " + repr(color)
-
-            print(toPrint)
-    sleep(2)
+			print(toPrint)
+	sleep(0.3)

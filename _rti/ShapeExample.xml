@@ -39,6 +39,13 @@
 				</property>
 				 End Monitoring -->
 			</participant_qos>
+			 <datareader_qos>
+				<time_based_filter>
+				  <minimum_separation>
+				    <sec>1</sec>
+			  	  </minimum_separation>
+				</time_based_filter>
+			      </datareader_qos>
 		</qos_profile>
 	</qos_library>
 
