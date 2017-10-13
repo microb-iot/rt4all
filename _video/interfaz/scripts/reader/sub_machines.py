@@ -1,9 +1,4 @@
-##############################################################################
-# Copyright (c) 2005-2015 Real-Time Innovations, Inc. All rights reserved.
-# Permission to modify and use for internal purposes granted.
-# This software is provided "as is", without warranty, express or implied.
-##############################################################################
-"""Samples's reader."""
+
 
 from __future__ import print_function
 from sys import path as sysPath
@@ -14,7 +9,6 @@ filepath = osPath.dirname(osPath.realpath(__file__))
 sysPath.append((filepath + "/../"))
 
 import rticonnextdds_connector as rti
-
 
 
 connector = rti.Connector("MyParticipantLibrary::Infinity",
@@ -32,6 +26,8 @@ for i in range(1, 5):
             #Para eliminar las 'u' (unicode), del diccionario
             salida = ast.literal_eval(json.dumps(sample))
             print(salida)
+
     sleep(1)
+
 
 sys.exit()

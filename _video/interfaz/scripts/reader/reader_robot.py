@@ -10,6 +10,11 @@ sysPath.append((filepath + "/../"))
 import rticonnextdds_connector as rti
 
 
+def createTXT(file, data):
+    myfile = open("../../report/"+file, 'a')
+    myfile.write(str(data)+", ")
+    myfile.close()
+
 
 connector = rti.Connector("MyParticipantLibrary::Infinity",
                           filepath + "/../XML/robot.xml")
@@ -23,12 +28,21 @@ for i in range(1, 500):
           
 
             # Or you can just access the field directly
-	    cam = inputDDS.samples.getBoolean(j, "cam")
+            cam = inputDDS.samples.getBoolean(j, "cam")
             temperature = inputDDS.samples.getNumber(j, "temperature")
             humidity = inputDDS.samples.getNumber(j, "humidity")
-	    robot_id = inputDDS.samples.getNumber(j, "robot_id")
-	    servo_angle_position=inputDDS.samples.getNumber(j, "servo_angle_position")
+            robot_id = inputDDS.samples.getNumber(j, "robot_id")
+            servo_angle_position=inputDDS.samples.getNumber(j, "servo_angle_position")
             toPrint ="Camera: " + repr(cam) + " ID: " + repr(int(robot_id)) + " Received temperature: " + repr(temperature) + " humidity: " + repr(humidity) + " servo_angle_position: " + repr(servo_angle_position)
 
             print(toPrint)
+            createTXT("robotTemperature_"+str(robot_id)+".txt", temperature)
+            createTXT("robotHumidity_"+str(robot_id)+".txt", humidity)
+            createTXT("robotServoAngle"+str(robot_id)+".txt", servo_angle_position)
+
     sleep(2)
+
+
+
+
+

@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import time
+import os
 from reportlab.graphics.shapes import Drawing, String
 from reportlab.graphics import renderPDF
 from reportlab.pdfgen import canvas
@@ -19,9 +20,12 @@ def graphic(variableGrafica, dataArray, initTime, interval):
    		plt.xlabel('time')
 		plt.ylabel(variableGrafica + ' samples')
 		plt.title(variableGrafica)
+		plt.grid(True)
 		plt.plot(timeArray, dataArray, 'ro', timeArray, dataArray, 'g')
 		plt.savefig('/var/tmp/'+variableGrafica+'.png')
 		#plt.show()
+
+		
 		
 
 		
