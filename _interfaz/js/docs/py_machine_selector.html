@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>py_machine_selector.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="py_machine_selector.html">
+                  py_machine_selector.js
+                </a>
+              
+                
+                <a class="source" href="py_machine_window.html">
+                  py_machine_window.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>py_machine_selector.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>JS code for the machine selector window</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Setup variables and packets</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>);
+
+<span class="hljs-keyword">var</span> PythonShell = <span class="hljs-built_in">require</span>(<span class="hljs-string">'python-shell'</span>);
+<span class="hljs-keyword">var</span> options = {
+  <span class="hljs-attr">pythonOptions</span>: [<span class="hljs-string">'-u'</span>],
+  <span class="hljs-attr">scriptPath</span>: __dirname+<span class="hljs-string">'/../scripts/reader/'</span>
+};
+
+<span class="hljs-keyword">var</span> nodeConsole = <span class="hljs-built_in">require</span>(<span class="hljs-string">'console'</span>);
+<span class="hljs-keyword">var</span> myConsole = <span class="hljs-keyword">new</span> nodeConsole.Console(process.stdout, process.stderr);
+
+<span class="hljs-keyword">var</span> machines_list = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Function that adds an option to the dropdown</p>
+<p><code>id</code> - The id of the dropdown</p>
+<p><code>machine_data</code> - Data of the machine to add</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add_option</span>(<span class="hljs-params">id,machine_data</span>)</span>{
+  myConsole.log(<span class="hljs-string">"Lista actual: "</span> + machines_list);;
+  <span class="hljs-keyword">var</span> selector = <span class="hljs-built_in">document</span>.getElementById(id);
+  <span class="hljs-keyword">var</span> option = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"option"</span>);
+  option.text = machine_data[<span class="hljs-string">"machine"</span>].toString() +<span class="hljs-string">" - "</span> +  machine_data[<span class="hljs-string">"machine_id"</span>].toString();
+  val = machine_data[<span class="hljs-string">"machine"</span>].toString() + <span class="hljs-string">"="</span> + machine_data[<span class="hljs-string">"machine_id"</span>].toString() + <span class="hljs-string">"="</span> + message[<span class="hljs-string">"machine_ip"</span>].toString();
+  myConsole.log(val);
+  option.value = val;
+  selector.add(option);
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Start function that connects to rti and get 
+the id, ip and name of the machine connected in the local network.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">load_machines</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">var</span> pyshell = <span class="hljs-keyword">new</span> PythonShell(<span class="hljs-string">"sub_machines.py"</span>,options);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Pyshell <code>on</code> starts a python shell with the
+script indicated and waits for receive a message</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  pyshell.on(<span class="hljs-string">'message'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">message</span>) </span>{
+    message_received = <span class="hljs-built_in">JSON</span>.parse(message.replace(<span class="hljs-regexp">/'/g</span>, <span class="hljs-string">'"'</span>));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Check if the machine is added, if not it creates an option in the dropdown</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span>(machines_list.indexOf(message_received[<span class="hljs-string">"machine_ip"</span>].toString()) == <span class="hljs-number">-1</span>){
+      machines_list.push(message_received[<span class="hljs-string">"machine_ip"</span>].toString());
+      add_option(<span class="hljs-string">"selector"</span>,message_received);
+    }
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>PyShell ends</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  pyshell.end(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{
+    <span class="hljs-keyword">if</span> (err){
+        <span class="hljs-keyword">throw</span> err;
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>When the pyshell ends it close the loading spinner and shows the dropdown</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"loader"</span>).style.display = <span class="hljs-string">"none"</span>;
+    <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"form_selector"</span>).style.display = <span class="hljs-string">"block"</span>;
+    <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"recharge_icon"</span>).style.display = <span class="hljs-string">"none"</span>;
+    myConsole.log(<span class="hljs-string">'finished'</span>);
+  });
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Updates the dropdown</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">recharge</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'selector'</span>).options.length = <span class="hljs-number">0</span>;
+  machines_list = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>();
+
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"recharge_icon"</span>).style.display = <span class="hljs-string">"inherit"</span>;
+  load_machines();
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

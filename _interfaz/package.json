@@ -6,7 +6,8 @@
     "start": "electron ."
   },
   "devDependencies": {
-    "electron": "^1.7.8"
+    "electron": "^1.7.8",
+    "jsdoc": "^3.5.5"
   },
   "dependencies": {
     "socket.io": "^2.0.3",
