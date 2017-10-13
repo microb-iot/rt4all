@@ -1,5 +1,6 @@
 var path = require('path');
 var create  = 0;
+var params = "";
 var PythonShell = require('python-shell');
 var options = {
   pythonOptions: ['-u'],
@@ -7,9 +8,7 @@ var options = {
 };
 
 var net = require('net');
-var client = net.connect(1234,"127.0.0.1");
-
-var enviado = 1;
+var client;
 
 var nodeConsole = require('console');
 var myConsole = new nodeConsole.Console(process.stdout, process.stderr);
@@ -25,8 +24,9 @@ var key_pressed_ant = "";
 
 document.addEventListener('DOMContentLoaded', function() {
   var url = window.location.search.substr(1);
-  var id = url.split("=")
-  document.getElementById("machine_title").innerHTML = "Maquina " + id[1];
+  params = url.split("=")
+  document.getElementById("machine_title").innerHTML = params[0] + params[1];
+  var client = net.connect(1234,params[2]);
 })
 
 document.onkeydown = function(evt) {
@@ -52,7 +52,7 @@ document.onkeyup = function(evt) {
 //Fill data functions
 
 function get_data(){
-	var pyshell_data = new PythonShell("sub_machines.py",options);
+	var pyshell_data = new PythonShell("reader_robot.py",options);
 	//Recogida de los mensajes de el script
 	pyshell_data.on('message', function (message) {
 		myConsole.log("Mensaje de python= " + message);
@@ -117,14 +117,4 @@ function start_stream(){
 
 function stop_stream(){
 	stream.exit(1);
-}
-
-
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
-    }
-  }
 }

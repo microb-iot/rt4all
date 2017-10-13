@@ -45,7 +45,7 @@
 
                     var sel = document.getElementById("selector");
                     var selection = sel.options[sel.selectedIndex].value;
-                    console.log(selection);
+                    console.log(sel.options[sel.selectedIndex].value);
                     ipcRenderer.send("new_machine_window", selection, "" );
                     //ipcRenderer.webContents.send( 'some-message' );
                 }
