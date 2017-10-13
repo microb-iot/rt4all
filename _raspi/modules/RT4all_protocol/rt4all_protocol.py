@@ -1,18 +1,17 @@
 #! /usr/bin/env python
 
 """
-Modbus module
+rt4all_protocol module
 """
 
-__author__ = 'Javi Ortega'
+__author__ = 'Juan Carlos Chaves'
 __copyright__ = 'Copyright (C) 2017'
 __license__ = 'MIT (expat) License'
-__version__ = '0.1'
-__maintainer__ = 'Javi Ortega'
-__email__ = 'javier.ortega@whitewallenergy.com'
+__version__ = '1.0'
+__maintainer__ = 'Juan Carlos Chaves Puertas'
+__email__ = 'lobolanja@gmail.com.com'
 
 
-import platform
 import sys
 import os
 import serial
@@ -20,44 +19,10 @@ import struct
 import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from rs485 import rs485
-
-DIR_SERIAL_PORT_MIPS = '/dev/ttyATH0'
-DIR_SERIAL_PORT_LINUX = '/dev/ttyUSB2'
-PLATFORM_MIPS = 'mips' == platform.machine()
-
-DEFAULT_PORT = DIR_SERIAL_PORT_MIPS if PLATFORM_MIPS else DIR_SERIAL_PORT_LINUX
 
 
-"""
-Average error is 0.00028 seg.
-Average enable write is 0.00000369240 seg.
-Average disable write is 0.00000364015 seg.
 
-8N1
-
-C071    BAUDRATE    N_BYTES    TIME_SLEEP    (TIME_SLEEP/N_BYTES) seg.
-3       2400        255        ---           0.0046
-4       4800        255        ---           0.0023
-5       9600        255        0.27          0.0010588235294117648
-6       19200       255        0.14          0.0005490196078431374
-7       38400       255        0.07          0.0002745098039215687
-8       57600       255        0.045         0.0001764705882352941
-9       76800       N O     S O P O R T A D O     E N     I V Y
-10      115200      255        0.0215        0.00008431372549019607
-
-MX 2
-[]   => sin respuesta
-
-        8N1     8N2     8E1     8E2     8O1     8O2
-2400    ok
-4800    ok
-9600    ok      ok      []      []      []      ok
-19200   ok
-38400   ok
-57600   ok
-115200  ok
-"""
+DEFAULT_PORT = '/dev/ttyACM0'
 
 BAUDRATE_2400 = 2400
 BAUDRATE_4800 = 4800
@@ -67,24 +32,24 @@ BAUDRATE_38400 = 38400
 BAUDRATE_57600 = 57600
 BAUDRATE_115200 = 115200
 
-MODBUS_ASCII = 'ASCII'
-MODBUS_RTU = 'RTU'
+
+
 
 COLON = '\x35'
 CARRIAGE_RETURN = '\x0D'
 LINE_FEED = '\x0A'
 
 BYTE_MAX_FRAME = 255    #: Maximum frame
-FRAME_END_RTU = 3.5
+FRAME_END = 3.5
 FRAME_END_ASCII = CARRIAGE_RETURN + LINE_FEED
 
-ALL_PROTOCOL = [MODBUS_RTU, MODBUS_ASCII]  #: Protocol support
+
 ALL_BAUDRATE = [BAUDRATE_2400, BAUDRATE_4800, BAUDRATE_9600, BAUDRATE_19200, BAUDRATE_38400, BAUDRATE_57600, BAUDRATE_115200] #: Baud rate support
 ALL_PARITY = [serial.PARITY_NONE, serial.PARITY_ODD]        #: Parity support
 ALL_STOPBITS = [serial.STOPBITS_ONE, serial.STOPBITS_TWO]   #: Stop bits support
 ALL_BYTESIZE = [serial.EIGHTBITS]                           #: Bytesize support
 
-DEFAULT_PROTOCOL = ALL_PROTOCOL[0]      #: Protcol default
+
 DEFAULT_BAUDRATE = ALL_BAUDRATE[2]      #: Baud rate default
 DEFAULT_PARITY = ALL_PARITY[0]          #: Parity default
 DEFAULT_STOPBITS = ALL_STOPBITS[0]      #: Stop bits default
@@ -100,9 +65,9 @@ BYTE_PER_SEC_38400 = 0.000286           #: Seconds to transfer a byte to 38400 b
 BYTE_PER_SEC_57600 = 0.000177           #: Seconds to transfer a byte to 57600 baud
 BYTE_PER_SEC_115200 = 0.00095           #: Seconds to transfer a byte to 115200 baud
 
-class Modbus:
+class RT4all_protocol:
     """"""
-    def __init__(self, port = DEFAULT_PORT, baudrate = DEFAULT_BAUDRATE, bytesize = DEFAULT_BYTESIZE, parity = DEFAULT_PARITY, stopbits = DEFAULT_STOPBITS, timeout = None, delay = DEFAULT_DELAY, protocol = DEFAULT_PROTOCOL):
+    def __init__(self, port = DEFAULT_PORT, baudrate = DEFAULT_BAUDRATE, bytesize = DEFAULT_BYTESIZE, parity = DEFAULT_PARITY, stopbits = DEFAULT_STOPBITS, timeout = None, delay = DEFAULT_DELAY):
         """
         :param port: Port
         :param baudrate: Baud rate
@@ -111,7 +76,7 @@ class Modbus:
         :param stopbits: Number of stop bits
         :param timeout: Set a read timeout value
         :param delay: Set a read delay value
-        :param protocol: Communication protocol
+
 
         :type port: string
         :type baudrate: integer
@@ -120,7 +85,7 @@ class Modbus:
         :type stopbits: integer
         :type timeout: float
         :type delay: float
-        :type protocol: string
+      
         """
         
         self.serial = None
@@ -137,11 +102,11 @@ class Modbus:
             self.timeout = timeout
 
         self.delay = delay
-        self.protocol = protocol
+        
 
-        self.set_serial(self.port, self.baudrate, self.bytesize, self.parity, self.stopbits, self.timeout, self.delay, self.protocol)
+        self.set_serial(self.port, self.baudrate, self.bytesize, self.parity, self.stopbits, self.timeout, self.delay)
 
-    def set_serial(self, port = None, baudrate = None, bytesize = None, parity = None, stopbits = None, timeout = None, delay = None, protocol = None):
+    def set_serial(self, port = None, baudrate = None, bytesize = None, parity = None, stopbits = None, timeout = None, delay = None):
         """
         Create a new pySerial.
         Default timeout is get_time_transfer(255, baudrate)
@@ -189,8 +154,7 @@ class Modbus:
         if not delay == None:
             self.delay = delay
 
-        if not protocol == None:
-            self.protocol = protocol
+       
 
         try:
             self.serial = serial.Serial(
@@ -199,7 +163,7 @@ class Modbus:
                 bytesize = self.bytesize,
                 parity = self.parity,
                 stopbits = self.stopbits,
-                timeout = (self.timeout + self.delay)
+                timeout = 0.2 #(self.timeout + self.delay)
             )
             return self.serial
 
@@ -291,18 +255,6 @@ class Modbus:
         """
         return self.set_serial(delay = delay)
 
-    def set_protocol(self, protocol = DEFAULT_PROTOCOL):
-        """
-        Update communication protocol
-
-        :param protocol: New protocol
-        :type delay: string
-
-        :returns: Current protocol
-        :rtype: string
-        """
-        self.protocol = protocol
-        return self.protocol
 
     def get_serial(self):
         """
@@ -450,7 +402,7 @@ class Modbus:
         :returns: Call `self.get_time_transfer(3.5)`
         :rtype: float
         """
-        return self.get_time_transfer(FRAME_END_RTU, baud)
+        return self.get_time_transfer(FRAME_END, baud)
 
     def raw(self, tx, byte_read = 255):
         """
@@ -463,10 +415,8 @@ class Modbus:
         :returns: Response
         :rtype: Buffer of bytes, None
         """
-        self.set_tx_enable()
         self.write(tx)
         self.sleep_tx(len(tx))
-        self.set_rx_enable()
         return self.read(byte_read)
 
     def write(self, tx):
@@ -497,7 +447,7 @@ class Modbus:
                 return self.serial.read(num_bytes)
             except Exception as e:
                 print 'Read exception', e
-                # self.serial_close()
+               
 
     def sleep_tx(self, num_bytes):
         """
@@ -522,63 +472,20 @@ class Modbus:
         """"""
         self.serial_close()
 
+
 if __name__ == "__main__":
-    """"""
-    debug = False
+    """"""     
+m = RT4all_protocol()
+tx = '\x01\x06\x00\x06\x00\x01'
+rx = m.raw(tx)
+print list(tx)
+print list(rx)
+#for i in range[1,255]:
+time.sleep(0.01)
+	
 
-    if debug:
-        m = Modbus(port = None)
-        tx_rtu = '\x11\x03\x00\x6B\x00\x03'
-        tx_ascii = '\x31\x31\x30\x33\x30\x30\x36\x42\x30\x30\x30\x33'
-
-        
-
-    m = Modbus()
-
-    # MX Diagnostic
-    # tx = '\x01\x08\x00\x00\xAB\xCE'
-
-    # MX Read register F002
-    tx = '\x01\x03\x11\x02\x00\x02'
-    
-    # rx = list(m.raw(tx))
-
-    #print 'break_condition', m.serial.break_condition
-
-    tx = '\x01\x03\x00\x01\x00\x01'
-
-
-    # RAW
-    m.write(tx)
-    m.serial.flush()
-    #m.sleep_tx(len(tx))
-
-
-    rx = list(m.read())
-    # ---
-
-    print rx
-
-
-
-    """
-    tx = '\x01\x03\x00\x20\x00\x01'
-    tx += m.get_crc(tx)
-
-    print m.get_serial()
-    print m.raw(tx)
-    """
-
-
-
-    """
-    m.set_parity('O')
-    m.set_parity('N')
-    tx = '\x02\x03\x00\x20\x00\x03\x04\x32'
-
-    m.set_tx_enable()
-    m.write(tx)
-    m.sleep_tx(len(tx))
-    m.set_rx_enable()
-    m.read(1024)
-    """
+#tx = '\x01\x03\x00\x00\x00\x02'
+tx = '\x01\x06\x00\x06\x00\x00'
+rx = m.raw(tx)
+print list(tx)
+print list(rx)

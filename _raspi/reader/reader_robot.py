@@ -16,7 +16,7 @@ connector = rti.Connector("MyParticipantLibrary::Infinity",
 inputDDS = connector.getInput("MySubscriber::MyRobotReader")
 
 for i in range(1, 500):
-    inputDDS.take()
+    inputDDS.read()
     numOfSamples = inputDDS.samples.getLength()
     for j in range(1, numOfSamples+1):
         if inputDDS.infos.isValid(j):

@@ -36,4 +36,4 @@ for i in range(1, 500):
                       " size: " + repr(size) + " color: " + repr(color)
 
             print(toPrint)
-    sleep(2)
+    sleep(0.5)
