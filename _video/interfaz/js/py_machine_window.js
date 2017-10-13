@@ -3,8 +3,12 @@ var create  = 0;
 var PythonShell = require('python-shell');
 var options = {
   pythonOptions: ['-u'],
-  scriptPath: __dirname+'/../scripts/writer/'
+  scriptPath: __dirname+'/../scripts/reader/'
 };
+
+var net = require('net');
+var client = net.connect(1234,"127.0.0.1");
+
 var enviado = 1;
 
 var nodeConsole = require('console');
@@ -14,7 +18,8 @@ var exec = require('child_process').exec;
 var stream;
 
 var key_list = {"W":"go","A":"left","S":"back","D":"right","Q":"scoop", "O":"cam_l", "P":"cam_r"};
-var key_unpressed = ".";
+var key_unpressed = {"W":"_go","A":"_left","S":"_back","D":"_right","Q":"_scoop", "O":"_cam_l", "P":"_cam_r"};
+var key_pressed_ant = "";
 
 //DOM functions
 
@@ -29,11 +34,10 @@ document.onkeydown = function(evt) {
     var charCode = evt.keyCode || evt.which;
     var key_pressed = String.fromCharCode(charCode);
     if(key_list[key_pressed] != undefined){
-    	myConsole.log("Valor enviado: " + enviado);
-    	if(enviado==1){
+    	if(key_pressed != key_pressed_ant){
     		send_key_pressed(key_list[key_pressed]);
-    		enviado=0;	
-    	} 
+    		key_pressed_ant = key_pressed;
+    	}
    	}
 }
 
@@ -41,13 +45,14 @@ document.onkeyup = function(evt) {
     evt = evt || window.event;
     var charCode = evt.keyCode || evt.which;
     var key_pressed = String.fromCharCode(charCode);
-   	//send_key_pressed(key_unpressed);
+   	send_key_pressed(key_unpressed[key_pressed_ant]);
+   	key_pressed_ant = "";
 }
 
 //Fill data functions
 
 function get_data(){
-	var pyshell_data = new PythonShell("../reader.py",options);
+	var pyshell_data = new PythonShell("sub_machines.py",options);
 	//Recogida de los mensajes de el script
 	pyshell_data.on('message', function (message) {
 		myConsole.log("Mensaje de python= " + message);
@@ -90,20 +95,8 @@ function delete_alert(){
 
 //Send data functions
 function send_key_pressed(key_pressed){
-	var pyshell_send = new PythonShell('writer_interface_command_robot.py',options);
-	pyshell_send.send("Tecla pulsada: " + key_pressed);
-
-	pyshell_send.on('message', function (message) {
-  		//Receive "print" from python script
-  		myConsole.log(message);
-	});
-
-	pyshell_send.end(function (err) {
-  	if (err) throw err;
-  		enviado = 1;
-		myConsole.log("Terminado de enviar: " + enviado)
-  		myConsole.log('Finish send');
-	});
+	myConsole.log("ENVIO");
+	client.write(key_pressed);
 }
 
 //Streaming functions
@@ -124,4 +117,14 @@ function start_stream(){
 
 function stop_stream(){
 	stream.exit(1);
+}
+
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
 }
