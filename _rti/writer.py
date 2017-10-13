@@ -16,10 +16,10 @@ connector = rti.Connector("MyParticipantLibrary::Zero",
                           filepath + "/ShapeExample.xml")
 outputDDS = connector.getOutput("MyPublisher::MySquareWriter")
 
-for i in range(1, 500):
+for i in range(1, 5):
     outputDDS.instance.setNumber("x", i)
     outputDDS.instance.setNumber("y", i*2)
     outputDDS.instance.setNumber("shapesize", 30)
     outputDDS.instance.setString("color", "BLUE")
     outputDDS.write()
-    sleep(1)
+    sleep(0.2)

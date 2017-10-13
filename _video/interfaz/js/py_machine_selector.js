@@ -27,7 +27,6 @@ function load_machines(){
   var pyshell = new PythonShell("sub_machines.py",options);
   //Recogida de los mensajes de el script
   pyshell.on('message', function (message) {
-      myConsole.log("GITANO");
     message_received = JSON.parse(message.replace(/'/g, '"'));
     if(machines_list.indexOf(message_received["machine_ip"].toString()) == -1){
       machines_list.push(message_received["machine_ip"].toString());

@@ -3,8 +3,9 @@ var create  = 0;
 var PythonShell = require('python-shell');
 var options = {
   pythonOptions: ['-u'],
-  scriptPath: __dirname+'/../scripts/'
+  scriptPath: __dirname+'/../scripts/writer/'
 };
+var enviado = 1;
 
 var nodeConsole = require('console');
 var myConsole = new nodeConsole.Console(process.stdout, process.stderr);
@@ -12,7 +13,7 @@ var myConsole = new nodeConsole.Console(process.stdout, process.stderr);
 var exec = require('child_process').exec;
 var stream;
 
-var key_list = ["W","A","S","D"];
+var key_list = {"W":"go","A":"left","S":"back","D":"right","Q":"scoop", "O":"cam_l", "P":"cam_r"};
 var key_unpressed = ".";
 
 //DOM functions
@@ -27,8 +28,12 @@ document.onkeydown = function(evt) {
     evt = evt || window.event;
     var charCode = evt.keyCode || evt.which;
     var key_pressed = String.fromCharCode(charCode);
-    if(key_list.indexOf(key_pressed) != -1){
-   		send_key_pressed(key_pressed);
+    if(key_list[key_pressed] != undefined){
+    	myConsole.log("Valor enviado: " + enviado);
+    	if(enviado==1){
+    		send_key_pressed(key_list[key_pressed]);
+    		enviado=0;	
+    	} 
    	}
 }
 
@@ -36,13 +41,13 @@ document.onkeyup = function(evt) {
     evt = evt || window.event;
     var charCode = evt.keyCode || evt.which;
     var key_pressed = String.fromCharCode(charCode);
-   	send_key_pressed(key_unpressed);
+   	//send_key_pressed(key_unpressed);
 }
 
 //Fill data functions
 
 function get_data(){
-	var pyshell_data = new PythonShell("reader.py",options);
+	var pyshell_data = new PythonShell("../reader.py",options);
 	//Recogida de los mensajes de el script
 	pyshell_data.on('message', function (message) {
 		myConsole.log("Mensaje de python= " + message);
@@ -55,6 +60,7 @@ function get_data(){
 		if (err){
 	    	throw err;
 		};
+		
 		myConsole.log('finished');
   	});
 }
@@ -84,7 +90,7 @@ function delete_alert(){
 
 //Send data functions
 function send_key_pressed(key_pressed){
-	var pyshell_send = new PythonShell('test3.py',options);
+	var pyshell_send = new PythonShell('writer_interface_command_robot.py',options);
 	pyshell_send.send("Tecla pulsada: " + key_pressed);
 
 	pyshell_send.on('message', function (message) {
@@ -94,6 +100,8 @@ function send_key_pressed(key_pressed){
 
 	pyshell_send.end(function (err) {
   	if (err) throw err;
+  		enviado = 1;
+		myConsole.log("Terminado de enviar: " + enviado)
   		myConsole.log('Finish send');
 	});
 }
