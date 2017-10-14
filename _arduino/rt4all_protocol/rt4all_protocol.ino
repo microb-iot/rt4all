@@ -31,7 +31,7 @@ RT4ALLSlave implements an unsigned int return value on a call to modbus_update()
 
 
 */
-
+#include <DHT11.h>
 
 
 #define BUFFER_SIZE 128
@@ -49,9 +49,10 @@ enum
   GO,//0006h
   BACK,//0007h
   LEFT,//0008h
-  RIGTH,//0009h
+  RIGHT,//0009h
   CAM_L,//000Ah
   CAM_R,//000Bh
+  SCOOP,
  
   TOTAL_ERRORS,
   // leave this one
@@ -61,8 +62,10 @@ enum
 
 int engine_l_f = 5;
 int engine_l_b = 6;
-int engine_r_f = 7;
-int engine_r_b = 8;
+int engine_r_f = 10;
+int engine_r_b = 11;
+int pin_dht=4;
+DHT11 dht11(pin_dht);
 unsigned int holdingRegs[TOTAL_REGS_SIZE];
 
 
@@ -98,6 +101,8 @@ void setup() {
    holdingRegs[LED_STATE]=1;
    holdingRegs[temperature]=7;
    holdingRegs[vel_motors]=100;
+   holdingRegs[pos_servo]=90;
+   holdingRegs[vel_servo]=5;
    
   pinMode(led, OUTPUT);
   pinMode(3,OUTPUT); 
@@ -108,26 +113,72 @@ void setup() {
   
 }
 void go(int vel){
-    analogWrite(engine_l_b,0);  
-    analogWrite(engine_r_b,0);
-    analogWrite(engine_l_f,vel);  
-    analogWrite(engine_r_f,vel);
+    digitalWrite(engine_l_b,0);  
+    digitalWrite(engine_r_b,0);
+    digitalWrite(engine_l_f,1);  
+    digitalWrite(engine_r_f,1);
 }
-void _go(){
-    analogWrite(engine_l_b,0);  
-    analogWrite(engine_r_b,0);
-    analogWrite(engine_l_f,0);  
-    analogWrite(engine_r_f,0);
+
+void left(int vel){
+    digitalWrite(engine_l_b,1);  
+    digitalWrite(engine_r_b,0);
+    digitalWrite(engine_l_f,0);  
+    digitalWrite(engine_r_f,1);
 }
+
+void back(int vel){
+    digitalWrite(engine_l_b,1);  
+    digitalWrite(engine_r_b,1);
+    digitalWrite(engine_l_f,0);  
+    digitalWrite(engine_r_f,0);
+}
+
+void right(int vel){
+    digitalWrite(engine_l_b,0);  
+    digitalWrite(engine_r_b,1);
+    digitalWrite(engine_l_f,1);  
+    digitalWrite(engine_r_f,0);
+}
+void idle(){
+    digitalWrite(engine_l_b,0);  
+    digitalWrite(engine_r_b,0);
+    digitalWrite(engine_l_f,0);  
+    digitalWrite(engine_r_f,0);
+}
+
 
 
 // the loop routine runs over and over again forever:
 void loop() {
-  slave_update(holdingRegs);
-   if(holdingRegs[GO])    go(holdingRegs[vel_motors]);
-   else if(!holdingRegs[GO]){
-     _go();
-   }
+    //Serial.print("funcionando");
+  for(int i=0;i<10000;i++){
+    slave_update(holdingRegs);
+     if(holdingRegs[GO])    go(holdingRegs[vel_motors]);
+     else if(!holdingRegs[GO]){
+       idle();
+       if(holdingRegs[BACK]) back(vel_motors);
+       else if(!holdingRegs[BACK]){
+          idle();
+          if(holdingRegs[LEFT]) left(vel_motors);
+          else if(!holdingRegs[LEFT]){
+            idle(); 
+            if(holdingRegs[RIGHT]) right(vel_motors);
+            else if (!holdingRegs[RIGHT])idle();
+          }
+       }
+     }
+  }
+     /*float temp, humi;
+     dht11.read(humi, temp);
+     holdingRegs[temperature] = temp;
+     holdingRegs[humidity] = humi;
+    Serial.print("temperature:");
+    Serial.print(holdingRegs[temperature]);
+    Serial.print(" humidity:");
+    Serial.print(holdingRegs[humidity]);
+    Serial.println();*/
+   
+   
    
      
 }
