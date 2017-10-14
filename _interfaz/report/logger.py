@@ -25,7 +25,8 @@ def graphic(variableGrafica, dataArray, initTime, interval):
 		plt.grid(True)
 		plt.plot(timeArray, dataArray, 'ro', timeArray, dataArray, 'g')
 		plt.savefig('/var/tmp/'+variableGrafica+'.png')
-		#plt.show()
+
+		plt.show()
 
 		
 		
