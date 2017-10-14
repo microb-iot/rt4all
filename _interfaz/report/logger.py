@@ -23,7 +23,8 @@ def graphic(variableGrafica, dataArray, initTime, interval):
 		plt.grid(True)
 		plt.plot(timeArray, dataArray, 'ro', timeArray, dataArray, 'g')
 		plt.savefig('/var/tmp/'+variableGrafica+'.png')
-		#plt.show()
+
+		plt.show()
 
 		
 		
@@ -71,8 +72,8 @@ if __name__ == "__main__":
 	tempFloat = np.array(arrayStringTemp, dtype=float)
 
 	#do the same humidity
-	file = open("../../_interfaz/report/robotHumidity_0.0.txt", 'r')
-	dataArrayHum= file.read()
+	file2 = open("../../_interfaz/report/robotHumidity_0.0.txt", 'r')
+	dataArrayHum= file2.read()
 	arrayStringHum = dataArrayHum.split(",")
 	print(arrayStringHum)
 	arrayStringHum.pop()

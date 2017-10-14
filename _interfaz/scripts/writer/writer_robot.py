@@ -3,6 +3,7 @@
 from sys import path as sysPath
 from os import path as osPath
 from time import sleep
+from random import randint
 filepath = osPath.dirname(osPath.realpath(__file__))
 sysPath.append(filepath + "/../")
 import rticonnextdds_connector as rti
@@ -20,8 +21,8 @@ print equipo
 
 for i in range(1, 500):
     outputDDS.instance.setNumber("cam", 1)
-    outputDDS.instance.setNumber("temperature", 16)
-    outputDDS.instance.setNumber("humidity", 67)
+    outputDDS.instance.setNumber("temperature", randint(1,50))
+    outputDDS.instance.setNumber("humidity", i)
     outputDDS.instance.setNumber("robot_id", 0)
     outputDDS.instance.setNumber("servo_angle_position", 34)
     outputDDS.write()
