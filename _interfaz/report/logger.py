@@ -14,7 +14,7 @@ def graphic(variableGrafica, dataArray, initTime, interval):
 		timeArray = []
 		for i in range(len(dataArray)):
 			timeArray.append(initTime + interval*i)
-		print timeArray
+		#print timeArray
 
 		#plot
    		plt.xlabel('time')
@@ -60,17 +60,33 @@ def createPDF(user, machine, id, ip):
 
 if __name__ == "__main__":
 
-	#variableGrafica = input()
-	dataArray = [23,54,36,78, 32,76,12, 23,54,36,78, 32,76,12]
-	graphic('Temperature',dataArray, 1, 0.5)
-	graphic('Humidity',dataArray, 1, 0.5)
+	#read temperature robot file as string, convert to float and graphic
+	file = open("../../_interfaz/report/robotTemperature_0.0.txt", 'r')
+	dataArrayTemp= file.read()
+	arrayStringTemp = dataArrayTemp.split(",")
+	print(arrayStringTemp)
+	#delete last positicion which is empty
+	arrayStringTemp.pop()
+	
+	tempFloat = np.array(arrayStringTemp, dtype=float)
+
+	#do the same humidity
+	file = open("../../_interfaz/report/robotHumidity_0.0.txt", 'r')
+	dataArrayHum= file.read()
+	arrayStringHum = dataArrayHum.split(",")
+	print(arrayStringHum)
+	arrayStringHum.pop()
+	
+	tempHum = np.array(arrayStringHum, dtype=float)
+	
+
+
+	
+
+	#file = open("../../_interfaz/report/robotHumidity_0.0.txt", 'r')
+	#dataArrayHum = file.read()
+	graphic('Temperature',tempFloat, 1, 2)
+	graphic('Humidity',tempHum, 1, 0.5)
 	createPDF('Lucia', 'robot1', 'id1', '192.168.1.1');
-	
-	
-	
-
-
-
-
 
 

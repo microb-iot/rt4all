@@ -12,7 +12,7 @@ import rticonnextdds_connector as rti
 
 def createTXT(file, data):
     myfile = open("../../report/"+file, 'a')
-    myfile.write(str(data)+", ")
+    myfile.write(str(data)+",")
     myfile.close()
 
 
