@@ -12,9 +12,7 @@ var options = {
 };
 
 // Create a variable for the socket connection
-var net = require('net');
 var client;
-
 var nodeConsole = require('console');
 var myConsole = new nodeConsole.Console(process.stdout, process.stderr);
 
@@ -22,8 +20,8 @@ var exec = require('child_process').exec;
 var stream;
 
 // Dictionary for the pressed keys and their unpressed code
-var key_list = {"W":"go","A":"left","S":"back","D":"right","Q":"scoop", "O":"cam_l", "P":"cam_r"};
-var key_unpressed = {"W":"_go","A":"_left","S":"_back","D":"_right","Q":"_scoop", "O":"_cam_l", "P":"_cam_r"};
+var key_list = {"W":"go","A":"left","S":"back","D":"right","Q":"scoop", "O":"cam_l", "P":"cam_r","9":"Goodbye"};
+var key_unpressed = {"W":"_go","A":"_left","S":"_back","D":"_right","Q":"_scoop", "O":"_cam_l", "P":"_cam_r","9":"_Goodbye"};
 var key_pressed_ant = "";
 
 // DOM functions
@@ -32,9 +30,11 @@ document.addEventListener('DOMContentLoaded', function() {
   params = url.split("=")
   // Receive the data needed with `get` params:
   // id, name and ip
-  document.getElementById("machine_title").innerHTML = params[0] + params[1];
+  document.getElementById("machine_title").innerHTML = params[0] +"#"+ params[1];
   // Start the socket connection in the specific port to the ip selected
-  var client = net.connect(1234,params[2]);
+  //client = 
+  var net = require('net');
+  client = net.connect(1234,params[2]);
 })
 
 // Read from the page if a key is pressed, only once, and then send it
@@ -43,6 +43,7 @@ document.onkeydown = function(evt) {
     var charCode = evt.keyCode || evt.which;
     var key_pressed = String.fromCharCode(charCode);
     //Check if the key pressed is in the list
+    myConsole.log(key_pressed);
     if(key_list[key_pressed] != undefined){
     	// If the key was not pressed before, it send
     	if(key_pressed != key_pressed_ant){
@@ -65,6 +66,7 @@ document.onkeyup = function(evt) {
 
 // Function that start when the page loads and reads data from RTI script
 function get_data(){
+  myConsole.log("ENTRO");
 	var pyshell_data = new PythonShell("reader_robot.py",options);
 	// Start the pyshell data and receive the messages from it
 	pyshell_data.on('message', function (message) {
@@ -89,17 +91,18 @@ function create_panels(message_received){
 	delete_alert();
 	message_received = JSON.parse(message_received.replace(/'/g, '"'));
 	myConsole.log(message_received);
+  if(message_received["cam"] == 1) document.getElementById("streaming_button").style.display="inline";
 	for (var key in message_received){
-			document.getElementById("sensors_panel").innerHTML += '<div class="panel panel-default"><div class="panel-heading">'+key+'</div><div class="panel-body" id="'+key+'"></div></div><hr>';
-    }
-    create = 1;
+    if(key !="cam") document.getElementById("sensors_panel").innerHTML += '<div class="panel panel-default"><div class="panel-heading">'+key+'</div><div class="panel-body" id="'+key+'"></div></div>';
+  }
+  create = 1;
 }
 
 // Update the panels when created, controlled used the variable `created`
 function update_panels(message_received){
 	message_received = JSON.parse(message_received.replace(/'/g, '"'));
 	for (var key in message_received){
-			document.getElementById(key).innerHTML = message_received[key];
+    if(key !="cam") document.getElementById(key).innerHTML = message_received[key];
     }
 }
 
