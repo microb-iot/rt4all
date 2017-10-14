@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import matplotlib.pyplot as plt
 import numpy as np
 import time
@@ -71,8 +73,8 @@ if __name__ == "__main__":
 	tempFloat = np.array(arrayStringTemp, dtype=float)
 
 	#do the same humidity
-	file = open("../../_interfaz/report/robotHumidity_0.0.txt", 'r')
-	dataArrayHum= file.read()
+	file2 = open("../../_interfaz/report/robotHumidity_0.0.txt", 'r')
+	dataArrayHum= file2.read()
 	arrayStringHum = dataArrayHum.split(",")
 	print(arrayStringHum)
 	arrayStringHum.pop()
@@ -80,8 +82,6 @@ if __name__ == "__main__":
 	tempHum = np.array(arrayStringHum, dtype=float)
 	
 
-
-	
 
 	#file = open("../../_interfaz/report/robotHumidity_0.0.txt", 'r')
 	#dataArrayHum = file.read()
