@@ -19,10 +19,12 @@ equipo = socket.gethostname()
 print equipo
 
 for i in range(1, 500):
-    outputDDS.instance.setBoolean("cam", 1)
+    outputDDS.instance.setNumber("cam", 1)
     outputDDS.instance.setNumber("temperature", 16)
     outputDDS.instance.setNumber("humidity", 67)
     outputDDS.instance.setNumber("robot_id", 0)
     outputDDS.instance.setNumber("servo_angle_position", 34)
     outputDDS.write()
     sleep(1)
+
+sys.exit()

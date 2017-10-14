@@ -26,7 +26,7 @@ function add_option(id,machine_data){
   var selector = document.getElementById(id);
   var option = document.createElement("option");
   option.text = machine_data["machine"].toString() +" - " +  machine_data["machine_id"].toString();
-  val = machine_data["machine"].toString() + "=" + machine_data["machine_id"].toString() + "=" + message["machine_ip"].toString();
+  val = machine_data["machine"].toString() + "=" + machine_data["machine_id"].toString() + "=" + machine_data["machine_ip"].toString();
   myConsole.log(val);
   option.value = val;
   selector.add(option);
