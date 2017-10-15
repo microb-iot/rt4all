@@ -1,4 +1,5 @@
 const {app, BrowserWindow, ipcMain, dialog} = require('electron');
+var path = require('path')
 //const ipc = require('electron').ipcMain;
 app.commandLine.appendSwitch('ignore-certificate-errors');
 
@@ -12,6 +13,7 @@ app.on('ready', () => {
 		height: 500,
 		width: 300,
 		resizable: false,
+		icon: path.join(__dirname, '/template/assets/icon/program_icon.png')
 	});
 	machine_selector_window.loadURL('file://' + __dirname + '/template/machine_selector.html');
 	machine_selector_window.setPosition(20, 80);

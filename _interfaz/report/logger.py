@@ -8,6 +8,9 @@ import sys
 from reportlab.graphics.shapes import Drawing, String
 from reportlab.graphics import renderPDF
 from reportlab.pdfgen import canvas
+from sys import path as sysPath
+from os import path as osPath
+filepath = osPath.dirname(osPath.realpath(__file__))
 
 
 
@@ -27,7 +30,7 @@ def graphic(variableGrafica, dataArray, initTime, interval):
 		plt.plot(timeArray, dataArray, 'ro', timeArray, dataArray, 'g')
 		plt.savefig('/var/tmp/'+variableGrafica+'.png')
 
-		plt.show()
+		#plt.show()
 
 		
 		
@@ -38,8 +41,8 @@ def createPDF(user, machine, id, ip):
 
 
 		#generate a PDF
-		aux = canvas.Canvas("./pdf/LAG.pdf")
-		aux.drawImage("./logo.png",400, 750, 200,100)
+		aux = canvas.Canvas(filepath + "/pdf/LAG.pdf")
+		aux.drawImage(filepath + "/logo.png",400, 750, 200,100)
 		aux.drawString(50,800,'****REPORT FILE****')
 		aux.drawString(50,750,'Date: '+ time.strftime("%d/%m/%y"))
 		aux.drawString(50,730,'Report time: ' +time.strftime("%H:%M:%S"))
@@ -65,7 +68,7 @@ def createPDF(user, machine, id, ip):
 if __name__ == "__main__":
 
 	#read temperature robot file as string, convert to float and graphic
-	file = open("../../_interfaz/report/robotTemperature_0.0.txt", 'r')
+	file = open(filepath+"/robotTemperature_0.0.txt", 'r')
 	dataArrayTemp= file.read()
 	arrayStringTemp = dataArrayTemp.split(",")
 	print(arrayStringTemp)
@@ -75,7 +78,7 @@ if __name__ == "__main__":
 	tempFloat = np.array(arrayStringTemp, dtype=float)
 
 	#do the same humidity
-	file2 = open("../../_interfaz/report/robotHumidity_0.0.txt", 'r')
+	file2 = open(filepath+"/robotHumidity_0.0.txt", 'r')
 	dataArrayHum= file2.read()
 	arrayStringHum = dataArrayHum.split(",")
 	print(arrayStringHum)
@@ -83,12 +86,6 @@ if __name__ == "__main__":
 	
 	tempHum = np.array(arrayStringHum, dtype=float)
 	
-
-<<<<<<< HEAD
-	 
-	
-=======
->>>>>>> bf5618f6858eed8b4ce8010bec40c6d5eef4e3f8
 
 	#file = open("../../_interfaz/report/robotHumidity_0.0.txt", 'r')
 	#dataArrayHum = file.read()

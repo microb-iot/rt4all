@@ -29,7 +29,7 @@ print equipo
 machine_ip=get_ip_address('wlp2s0b1')
 print machine_ip
 for i in range(1, 500):
-    outputDDS.instance.setString("machine", "robot")
+    outputDDS.instance.setString("machine", "Crane")
     outputDDS.instance.setNumber("machine_id", 0)
     outputDDS.instance.setString("machine_ip", machine_ip)
     outputDDS.write()

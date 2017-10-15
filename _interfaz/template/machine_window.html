@@ -21,6 +21,7 @@
             <p class="lead"></p>
           </div>
           <div class="col-lg-4 col-md-5 col-sm-6">
+            <img src="../template/assets/img/logo_rt4all.png" style="width: 45%;margin-top: 5px;float: right;">
           </div>
         </div>
 
@@ -41,18 +42,32 @@
         </div>
         <div class="row">
           <div id="data_alert" class="alert alert-dismissible alert-warning">
-                <h4>Alerta</h4>
-                <p>No se reciben datos</p>
+                <h4>Warning</h4>
+                <p>No data received</p>
           </div>
+
           <div id = "sensors_panel" class="col-xs-5">
           </div>
-          <div id="div_ssh_terminal" class="col-md-5">
-            <iframe id="ssh_terminal" src="https://192.168.1.138:443" height="200" width="300" style="float:right; display: none;"></iframe>
+          <div class="col-xs-7">
+            <div id="controls_panel" class="alert alert-dismissible alert-success" style="display:none">
+              Controls <br>
+              <p id="go" class="font_regular">w - GO</p>
+              <p id="left" class="font_regular">a - LEFT</p>
+              <p id="right" class="font_regular">s - RIGHT</p>
+              <p id="back" class="font_regular">d - BACK</p>
+              <p id="cam_l" class="font_regular">o - Camera turn left</p>
+              <p id="cam_r" class="font_regular">p - Camera turn right</p>
+              <p id="scoop" class="font_regular">q - Up scoop</p>
+            </div>
+          </div>
+
+          <div id="div_ssh_terminal" class="col-xs-7">
+            <iframe id="ssh_terminal" src="https://192.168.1.138:443" height="200" width="405" style="float:right; display: none;"></iframe>
           </div>
         </div>
           <!-- Modal de si hay camara o no -->
           <div class="col-lg-6">
-
+            <a id="report_button" onclick="generate_report()" class="btn btn-info" style="display: none;">Generate report</a>
           </div>
         </div>
       </div>

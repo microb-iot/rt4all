@@ -42,10 +42,10 @@ document.onkeydown = function(evt) {
     var charCode = evt.keyCode || evt.which;
     var key_pressed = String.fromCharCode(charCode);
     //Check if the key pressed is in the list
-    myConsole.log(key_pressed);
     if(key_list[key_pressed] != undefined){
     	// If the key was not pressed before, it send
     	if(key_pressed != key_pressed_ant){
+        toggle_bold_key_panel(key_list[key_pressed]);
     		send_key_pressed(key_list[key_pressed]);
     		key_pressed_ant = key_pressed;
     	}
@@ -57,19 +57,23 @@ document.onkeyup = function(evt) {
     evt = evt || window.event;
     var charCode = evt.keyCode || evt.which;
     var key_pressed = String.fromCharCode(charCode);
-   	send_key_pressed(key_unpressed[key_pressed_ant]);
-   	key_pressed_ant = "";
+    if(key_unpressed[key_pressed] != undefined){
+      toggle_bold_key_panel(key_list[key_pressed]);
+   	  send_key_pressed(key_unpressed[key_pressed_ant]);
+      key_pressed_ant = "";
+    }
 }
 
 //Fill data functions
 
 // Function that start when the page loads and reads data from RTI script
 function get_data(){
-  myConsole.log("ENTRO");
 	var pyshell_data = new PythonShell("reader_robot.py",options);
 	// Start the pyshell data and receive the messages from it
 	pyshell_data.on('message', function (message) {
 		myConsole.log("Mensaje de python= " + message);
+    document.getElementById("controls_panel").style.display="block";
+    document.getElementById("report_button").style.display="inline";
 		// Create the panels for the DOM, and if created, update 
 		if(create == 0) create_panels(message);
 		else update_panels(message);
@@ -92,7 +96,7 @@ function create_panels(message_received){
 	myConsole.log(message_received);
   if(message_received["cam"] == 1) document.getElementById("streaming_button").style.display="inline";
 	for (var key in message_received){
-    if(key !="cam") document.getElementById("sensors_panel").innerHTML += '<div class="panel panel-default"><div class="panel-heading">'+key+'</div><div class="panel-body" id="'+key+'"></div></div>';
+    if(key !="cam") document.getElementById("sensors_panel").innerHTML += '<div class="panel panel-default"><div class="panel-heading" style="background-color: #d0d0d0;">'+key+'</div><div class="panel-body" id="'+key+'"></div></div>';
   }
   create = 1;
 }
@@ -147,4 +151,29 @@ function toggle_sshterminal(){
     } else {
         x.style.display = "none";
     }
+}
+
+function toggle_bold_key_panel(id){
+  acc_style = document.getElementById(id);
+  if(acc_style.className == "font_regular") acc_style.className = "font_bold";
+  else acc_style.className = "font_regular";
+}
+
+function generate_report(){
+  var options_report = {
+    pythonOptions: ['-u'],
+    scriptPath: __dirname+'/../report/',
+    args: ['Pedro','Crane','0','192.168.1.137']
+  };
+  var pyshell_report = new PythonShell("logger.py",options_report);
+  pyshell_report.on('message', function (message) {
+    myConsole.log(message);
+  });
+
+  pyshell_report.end(function (err) {
+    if (err){
+        throw err;
+    };
+    myConsole.log('finished');
+  });
 }
