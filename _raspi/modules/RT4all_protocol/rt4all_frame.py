@@ -31,7 +31,7 @@ class Frame:
 
 	def create_frame(self, code_func='\x00', start_address='\x00\x00', data=''):
 		"""
-		Return modbus frame: slave_address + code_func + start_address + data + CRC.
+		Return frame: slave_address + code_func + start_address + data 
 
 		:param code_func: Buffer of (1) bytes with code function.
 		:param start_address: Buffer of (2) bytes with start address.
@@ -213,11 +213,9 @@ class Frame:
 
 		:param start_address: Buffer of (2) bytes with start address.
 		:param num_register: Numer of registers to read.
-		:param is_double: A double register occupies 4 bytes, simple 2 bytes.
 
 		:type start_address: Buffer of bytes.
 		:type num_register: Integer.
-		:type is_double: Bool.
 
 		:returns: Array with values of registers.
 		:rtype: Array of integers/None.
@@ -241,16 +239,11 @@ class Frame:
 	def raw_write_registers(self, start_address='\x00\x00', value=0):
 		"""
 		:param start_address: Start address to write.
-		:param num_register: Numer of registers to write.
-		:param values: The new values of registers.
-		:param is_double: A double register occupies 4 bytes, simple 2 bytes.
-		
-		:type start_address: Buffer of (2) bytes.
-		:type values: Array of integer. If is double: [0, 4294967295] ( 4 bytes when encode) else: [0, 65535] ( 2 bytes when encode).
-		:type num_register: Integer.
-		:type is_double: Bool.
+		:param value: The new value of registers.
 
-	
+		:type start_address: Buffer of (2) bytes.
+		:type value: integer.
+	.
 		:returns: Number of registers affected.
 		:rtype: Integer.
 		"""
@@ -271,18 +264,7 @@ class Frame:
 
 
 	def raw(self, tx):
-		"""
-		Raw and parse read multiple coils.
-		
-		:param start_address: Buffer of (2) bytes with start address.
-		:param num_coil: Numer of coils to read.
 
-		:type start_address: Buffer of bytes.
-		:type num_coil: Integer.
-
-		:returns: Array with statuses of coils.
-		:rtype: Array of bool/None.
-		"""
 		rx = self.protocol.raw(tx)
 
 		if self.debug:
