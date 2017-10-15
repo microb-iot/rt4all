@@ -11,6 +11,7 @@ __maintainer__ = 'Juan Carlos Chaves Puertas'
 __email__ = 'lobolanja@gmail.com'
 
 import struct
+import register_robot
 
 # REGISTERS
 READ_MULTIPLE_REGISTERS = '\x03'
@@ -237,7 +238,7 @@ class Frame:
 			return self.parse_read_multiple_registers(rx, register_byte)
 
 
-	def raw_write_registers(self, start_address='\x00\x00', num_register=1, value=0):
+	def raw_write_registers(self, start_address='\x00\x00', value=0):
 		"""
 		:param start_address: Start address to write.
 		:param num_register: Numer of registers to write.
@@ -255,7 +256,7 @@ class Frame:
 		"""
 		result = 0
 
-		tx = self.write_single_register(start_address, value[0])
+		tx = self.write_single_register(start_address, value=value)
 
 		rx = self.protocol.raw(tx)
 
@@ -309,9 +310,8 @@ if __name__ == '__main__':
 
 	import rt4all_protocol
 	f = Frame(rt4all_protocol.RT4all_protocol())
-	f.raw_write_registers('\x00\x06',1,[1])
-	f.raw_read_registers('\x00\x06',)
-	f.raw_write_registers('\x00\x06',1,[0])
-	f.raw_read_registers('\x00\x06',1)
+	f.raw_write_registers(register_robot.temperature,512)
+	f.raw_read_registers(register_robot.temperature,2)
+
 	
 	
