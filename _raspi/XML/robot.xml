@@ -23,7 +23,7 @@
     <types>
 
 	   	<struct name="robot_environment_variables" extensibility="extensible">
-			<member name="cam"  id="0" type="boolean"/>
+			<member name="cam"  id="0" type="short"/>
 			<member name="temperature"  id="1" type="long"/>
 			<member name="humidity"  id="2" type="long"/>  
 			<member name="servo_angle_position"  id="3" type="long"/>  

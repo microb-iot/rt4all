@@ -476,6 +476,7 @@ class RT4all_protocol:
 if __name__ == "__main__":
     """"""     
 m = RT4all_protocol()
+
 tx = '\x01\x06\x00\x08\x00\x01'
 rx = m.raw(tx)
 print list(tx)

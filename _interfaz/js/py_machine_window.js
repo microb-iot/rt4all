@@ -3,6 +3,7 @@
 // Setup variables and packets
 
 var path = require('path');
+var net = require('net');
 var create  = 0;
 var params = "";
 var PythonShell = require('python-shell');
@@ -32,8 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // id, name and ip
   document.getElementById("machine_title").innerHTML = params[0] +"#"+ params[1];
   // Start the socket connection in the specific port to the ip selected
-  //client = 
-  var net = require('net');
   client = net.connect(1234,params[2]);
 })
 
@@ -134,4 +133,18 @@ function start_stream(){
     }
 
 	});
+}
+
+function reconnect_button(){
+    client = net.connect(1234,params[2]);
+}
+
+
+function toggle_sshterminal(){
+    var x = document.getElementById("ssh_terminal");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
 }

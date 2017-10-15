@@ -7,7 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="stylesheet" href="./bootstrap.css" media="screen">
     <link rel="stylesheet" href="../template/css/bootstrap.min.css">
+    <link href="../template/css/style_window.css" rel="stylesheet">
     <script src="../js/py_machine_window.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body style="background-color:#eee" onload="get_data()">
     <div class="container">
@@ -16,7 +18,7 @@
         <div class="row">
           <div class="col-lg-8 col-md-7 col-sm-6">
             <h1 id="machine_title"></h1>
-            <p class="lead">Data</p>
+            <p class="lead"></p>
           </div>
           <div class="col-lg-4 col-md-5 col-sm-6">
           </div>
@@ -30,14 +32,22 @@
           <div class="col-md-5" style="padding-bottom: 15px">
             <a id="streaming_button" onclick="start_stream()" class="btn btn-success" style="display: none">Streaming</a>
           </div>
+          <div class="col-xs-5" style="padding-bottom: 15px">
+            <a id="reconnect_button" onclick="reconnect_button()" class="btn btn-warning" style="">Reconnect</a>
+          </div>
+          <div class="col-md-5" style="padding-bottom: 15px; float: right;">
+            <a id="terminal_button" onclick="toggle_sshterminal()" class="btn btn-primary" style=""><i class="fa fa-terminal" aria-hidden="true"></i> SSH</a>
+          </div>
         </div>
-
         <div class="row">
           <div id="data_alert" class="alert alert-dismissible alert-warning">
                 <h4>Alerta</h4>
                 <p>No se reciben datos</p>
           </div>
           <div id = "sensors_panel" class="col-xs-5">
+          </div>
+          <div id="div_ssh_terminal" class="col-md-5">
+            <iframe id="ssh_terminal" src="https://192.168.1.138:443" height="200" width="300" style="float:right; display: none;"></iframe>
           </div>
         </div>
           <!-- Modal de si hay camara o no -->
