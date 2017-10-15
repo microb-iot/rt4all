@@ -22,22 +22,22 @@
 
 <div class="container">
 
-    <img src="../template/assets/img/Bosch_logo.png" style="width: 98%;"></img>
+    <img src="../template/assets/img/logo_rt4all.png" style="width: 98%;"></img>
     <div class="row">
         <div id="loader">
         </div>
     </div>
     <div class="row">
         <div id="form_selector" class="form-signin animate-bottom">
-            <h2>Selecciona la máquina</h2>
+            <!--<h2>Selecciona la máquina</h2>-->
             <div class="input-group">
                 <span class="input-group-btn">
-                    <button id="recharge_button" onclick="recharge()" class="btn btn-primary" type="button" style="padding-top: 10px;padding-bottom: 9px;"><i id="recharge_icon" class="fa fa-circle-o-notch fa-spin" style="display:none"></i> Recargar</button>
+                    <button id="recharge_button" onclick="recharge()" class="btn btn-primary" type="button" style="padding-top: 10px;padding-bottom: 9px;"><i id="recharge_icon" class="fa fa-circle-o-notch fa-spin" style="display:none"></i> Refresh</button>
                 </span>
                 <select id="selector" class="form-control"></select>
             </div>
             <br> 
-            <button id="conectar_maquina" onClick="nuevaventana()" class="btn btn-lg btn-primary btn-block" type="submit" style="background-color: #33b768; border-color: #33b768;">Conectar</button>
+            <button id="conectar_maquina" onClick="nuevaventana()" class="btn btn-lg btn-primary btn-block" type="submit" style="background-color: #33b768; border-color: #33b768;">Connect</button>
             <script type="text/javascript">
                 var {ipcRenderer} = require('electron');
                 function nuevaventana(){

@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // id, name and ip
   document.getElementById("machine_title").innerHTML = params[0] +"#"+ params[1];
   // Start the socket connection in the specific port to the ip selected
-  //client = 
   client = net.connect(1234,params[2]);
 })
 
