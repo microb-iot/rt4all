@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 import os
+import sys
 from reportlab.graphics.shapes import Drawing, String
 from reportlab.graphics import renderPDF
 from reportlab.pdfgen import canvas
@@ -81,13 +82,21 @@ if __name__ == "__main__":
 	tempHum = np.array(arrayStringHum, dtype=float)
 	
 
-
+	 
 	
 
 	#file = open("../../_interfaz/report/robotHumidity_0.0.txt", 'r')
 	#dataArrayHum = file.read()
 	graphic('Temperature',tempFloat, 1, 2)
-	graphic('Humidity',tempHum, 1, 0.5)
-	createPDF('Lucia', 'robot1', 'id1', '192.168.1.1');
+	graphic('Humidity',tempHum, 1, 2)
+
+	#input arg to generate pdf report
+	userName= sys.argv[1]
+	robotName= sys.argv[2] 
+	robotID= sys.argv[3]
+	IP= sys.argv[4]
+	#print(userName +" " + robotName + " "+ robotID +" "+ IP)
+
+	createPDF(userName, robotName, robotID, IP);
 
 
