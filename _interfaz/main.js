@@ -1,5 +1,6 @@
 const {app, BrowserWindow, ipcMain, dialog} = require('electron');
 //const ipc = require('electron').ipcMain;
+app.commandLine.appendSwitch('ignore-certificate-errors');
 
 app.on('window-all-closed', () => {
   app.quit()
@@ -22,7 +23,7 @@ app.on('ready', () => {
 ipcMain.on( "new_machine_window", ( e, arg ) => {
     //console.log(arg);
     var machine_window = new BrowserWindow({
-		height: 800,
+		height: 700,
 		width: 800,
 		resizable: false
 	});

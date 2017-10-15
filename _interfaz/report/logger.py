@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import matplotlib.pyplot as plt
 import numpy as np
 import time
@@ -81,8 +83,6 @@ if __name__ == "__main__":
 	tempHum = np.array(arrayStringHum, dtype=float)
 	
 
-
-	
 
 	#file = open("../../_interfaz/report/robotHumidity_0.0.txt", 'r')
 	#dataArrayHum = file.read()
