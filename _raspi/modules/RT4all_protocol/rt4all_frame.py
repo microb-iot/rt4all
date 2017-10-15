@@ -121,10 +121,10 @@ class Frame:
 		:rtype: Buffer of bytes.
 		
 		"""
-		print list(self.encode(num_register))
+		
 		return self.create_frame(READ_MULTIPLE_REGISTERS, start_address, self.encode(num_register))
 
-	def write_single_register(self, start_address='\x00\x00', value=1, unsigned=True):
+	def write_single_register(self, start_address='\x00\x00', value=1):
 		"""
 		Creates a frame to write single register.
 
@@ -137,7 +137,7 @@ class Frame:
 		:returns: Frame to write single register.
 		:rtype: Buffer of bytes.
 		"""
-		print list(self.encode(value))
+		
 		return self.create_frame(WRITE_SINGLE_REGISTER, start_address, self.encode(value))
 
    
@@ -303,7 +303,7 @@ if __name__ == '__main__':
 	import sys
 	import os
 
-    PATH_rt4all_protocol = os.path.abspath(__file__) + '/rt4all_protocol'
+	PATH_rt4all_protocol = os.path.abspath(__file__) + '/rt4all_protocol'
     
 	sys.path.insert(0, PATH_rt4all_protocol)
 
