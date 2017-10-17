@@ -22,7 +22,7 @@ app.on('ready', () => {
 	})
 });
 
-ipcMain.on( "new_machine_window", ( e, arg ) => {
+ipcMain.on( "new_Crane_window", ( e, arg ) => {
     //console.log(arg);
     var machine_window = new BrowserWindow({
 		height: 700,
@@ -32,5 +32,18 @@ ipcMain.on( "new_machine_window", ( e, arg ) => {
     //machine_window.webContents.send('data-id', arg);
 	machine_window.loadURL('file://' + __dirname + '/template/machine_window.html?'+arg);
 	machine_window.webContents.openDevTools();
+	machine_window.setPosition(400,5);
+} );
+
+ipcMain.on( "new_Shovel_window", ( e, arg ) => {
+    //console.log(arg);
+    var machine_window = new BrowserWindow({
+		height: 500,
+		width: 500,
+		resizable: false
+	});
+    //machine_window.webContents.send('data-id', arg);
+	machine_window.loadURL('file://' + __dirname + '/template/shovel_window.html?'+arg);
+	//machine_window.webContents.openDevTools();
 	machine_window.setPosition(400,5);
 } );

@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // id, name and ip
   document.getElementById("machine_title").innerHTML = params[0] +"#"+ params[1];
   // Start the socket connection in the specific port to the ip selected
-  client = net.connect(1234,params[2]);
+  client = net.connect(1235,params[2]);
 })
 
 // Read from the page if a key is pressed, only once, and then send it
@@ -68,7 +68,7 @@ document.onkeyup = function(evt) {
 
 // Function that start when the page loads and reads data from RTI script
 function get_data(){
-	var pyshell_data = new PythonShell("reader_robot.py",options);
+	var pyshell_data = new PythonShell("reader_shovel.py",options);
 	// Start the pyshell data and receive the messages from it
 	pyshell_data.on('message', function (message) {
 		myConsole.log("Mensaje de python= " + message);
