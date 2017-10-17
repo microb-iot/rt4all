@@ -12,7 +12,13 @@ __email__ = 'lobolanja@gmail.com'
 
 import struct
 import register_robot
-
+from random import randint
+import time
+import sys
+import os
+PATH_rt4all_protocol = os.path.abspath(__file__) + '/rt4all_protocol'
+sys.path.insert(0, PATH_rt4all_protocol)
+import rt4all_protocol as protocol
 # REGISTERS
 READ_MULTIPLE_REGISTERS = '\x03'
 WRITE_SINGLE_REGISTER = '\x06'
@@ -280,18 +286,8 @@ class Frame:
     ##### END TO-DO #####
 
 if __name__ == '__main__':
-	from random import randint
-	import time
 
-	import sys
-	import os
-
-	PATH_rt4all_protocol = os.path.abspath(__file__) + '/rt4all_protocol'
-    
-	sys.path.insert(0, PATH_rt4all_protocol)
-
-	import rt4all_protocol
-	f = Frame(rt4all_protocol.RT4all_protocol())
+	f = Frame(protocol.RT4all_protocol())
 	f.raw_write_registers(register_robot.temperature,512)
 	f.raw_read_registers(register_robot.temperature,2)
 
