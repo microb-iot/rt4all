@@ -43,6 +43,17 @@
                 <h4>Warning</h4>
                 <p>No data received</p>
           </div>
+          <div id = "sensors_panel" class="col-xs-5"></div>
+          <div class="col-xs-7">
+            <div id="controls_panel" class="alert alert-dismissible alert-success" style="display:none">
+              Controls <br>
+              <p id="go" class="font_regular">w - UP</p>
+              <p id="right" class="font_regular">s - DOWN</p>
+            </div>
+          </div>
+          <div id="div_ssh_terminal" class="col-xs-7">
+            <iframe id="ssh_terminal" src="https://192.168.1.138:443" height="200" width="263" style="float:right; display: none;"></iframe>
+          </div>
         </div>
       </div>
       <!--<div class="bs-docs-section">

@@ -22,7 +22,7 @@ app.on('ready', () => {
 	})
 });
 
-ipcMain.on( "new_Crane_window", ( e, arg ) => {
+ipcMain.on( "new_robot_window", ( e, arg ) => {
     //console.log(arg);
     var machine_window = new BrowserWindow({
 		height: 700,
