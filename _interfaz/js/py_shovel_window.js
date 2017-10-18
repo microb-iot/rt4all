@@ -21,8 +21,8 @@ var exec = require('child_process').exec;
 var stream;
 
 // Dictionary for the pressed keys and their unpressed code
-var key_list = {"W":"go","A":"left","S":"back","D":"right","Q":"scoop", "O":"cam_l", "P":"cam_r","9":"Goodbye"};
-var key_unpressed = {"W":"_go","A":"_left","S":"_back","D":"_right","Q":"_scoop", "O":"_cam_l", "P":"_cam_r","9":"_Goodbye"};
+var key_list = {"W":"go","S":"back"};
+var key_unpressed = {"W":"_go","S":"_back"};
 var key_pressed_ant = "";
 
 // DOM functions
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // id, name and ip
   document.getElementById("machine_title").innerHTML = params[0] +"#"+ params[1];
   // Start the socket connection in the specific port to the ip selected
-  client = net.connect(1234,params[2]);
+  client = net.connect(1235,params[2]);
 })
 
 // Read from the page if a key is pressed, only once, and then send it
@@ -68,12 +68,12 @@ document.onkeyup = function(evt) {
 
 // Function that start when the page loads and reads data from RTI script
 function get_data(){
-	var pyshell_data = new PythonShell("reader_robot.py",options);
+	var pyshell_data = new PythonShell("reader_shovel.py",options);
 	// Start the pyshell data and receive the messages from it
 	pyshell_data.on('message', function (message) {
 		myConsole.log("Mensaje de python= " + message);
     document.getElementById("controls_panel").style.display="block";
-    document.getElementById("report_button").style.display="inline";
+    //document.getElementById("report_button").style.display="inline";
 		// Create the panels for the DOM, and if created, update 
 		if(create == 0) create_panels(message);
 		else update_panels(message);
@@ -140,7 +140,7 @@ function start_stream(){
 }
 
 function reconnect_button(){
-    client = net.connect(1234,params[2]);
+    client = net.connect(1235,params[2]);
 }
 
 

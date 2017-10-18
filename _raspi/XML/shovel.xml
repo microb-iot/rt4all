@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+
+<dds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="http://community.rti.com/schema/5.1.0/rti_dds_profiles.xsd" version="5.1.0">
+
+    <!-- Qos Library -->
+	<qos_library name="QosLibrary">
+		<qos_profile name="DefaultProfile" 
+				     base_name="BuiltinQosLibExp::Generic.StrictReliable"
+					 is_default_qos="true">
+			<participant_qos>
+				
+				<transport_builtin>
+				    <mask>UDPV4 | SHMEM</mask>
+				</transport_builtin>
+
+			</participant_qos>
+		</qos_profile>
+	</qos_library>
+
+    <!-- types -->
+    <types>
+
+	   	<struct name="shovel_environment_variables" extensibility="extensible">
+			<member name="cam"  id="0" type="short"/>
+			<member name="servo_angle_position"  id="3" type="long"/>  
+			<member name="robot_id" id="4" type="short"/>
+
+		</struct>
+    </types>
+
+
+    <!-- Domain Library -->
+    <domain_library name="MyShovelDomainLibrary">
+        <domain name="MyShovelDomain" domain_id="0">
+            <register_type name="shovel_environment_variables"  type_ref="shovel_environment_variables" />
+            <topic name="shovel"    register_type_ref="shovel_environment_variables"/>
+
+        </domain>
+    </domain_library>
+
+
+    <!-- Participant library -->
+    <domain_participant_library name="MyParticipantLibrary">
+      <domain_participant name="Infinity" domain_ref="MyShovelDomainLibrary::MyShovelDomain">
+
+        <publisher name="MyPublisher">
+				  <data_writer name="MyShovelWriter" topic_ref="shovel" />
+        </publisher>
+
+        <subscriber name="MySubscriber">
+          <data_reader name="MyShovelReader" topic_ref="shovel" />
+        </subscriber>
+
+		  </domain_participant>
+   </domain_participant_library>
+</dds>
