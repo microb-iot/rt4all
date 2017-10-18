@@ -34,7 +34,6 @@ RT4ALLSlave implements an unsigned int return value on a call to modbus_update()
 #include <DHT11.h>
 #include <Servo.h>
 
-
 #define BUFFER_SIZE 128
 
 enum 
@@ -61,16 +60,14 @@ enum
   // total number of registers for function 3 and 16 share the same register array
 };
 
-int engine_l_f = 6;
-int engine_l_b = 5;
-int engine_r_f = 11;
-int engine_r_b = 10;
+int engine_l_f = 5;
+int engine_l_b = 6;
+int engine_r_f = 10;
+int engine_r_b = 11;
 int pin_dht=4;
 DHT11 dht11(pin_dht);
 unsigned int holdingRegs[TOTAL_REGS_SIZE];
-float temp, humi;
 Servo servoMotor;
-
 
 
 // frame[] is used to recieve and transmit packages. 
@@ -105,23 +102,20 @@ void setup() {
    holdingRegs[LED_STATE]=1;
    holdingRegs[temperature]=7;
    holdingRegs[vel_motors]=100;
-   holdingRegs[pos_servo]=90;
+   holdingRegs[pos_servo]=100;
    holdingRegs[vel_servo]=5;
-   
+   servoMotor.attach(9);
   pinMode(led, OUTPUT);
   pinMode(3,OUTPUT); 
   pinMode(engine_l_f,OUTPUT);  
   pinMode(engine_l_b,OUTPUT);  
   pinMode(engine_r_f,OUTPUT);  
   pinMode(engine_r_b,OUTPUT); 
-  servoMotor.attach(38);
+  servoMotor.write(holdingRegs[pos_servo]);
   
 }
 void go(int vel){
-    digitalWrite(engine_l_b,0);  
-    digitalWrite(engine_r_b,0);
-    digitalWrite(engine_l_f,1);  
-    digitalWrite(engine_r_f,1);
+    holdingRegs[pos_servo]+=2;
 }
 
 void left(int vel){
@@ -132,10 +126,7 @@ void left(int vel){
 }
 
 void back(int vel){
-    digitalWrite(engine_l_b,1);  
-    digitalWrite(engine_r_b,1);
-    digitalWrite(engine_l_f,0);  
-    digitalWrite(engine_r_f,0);
+    holdingRegs[pos_servo]-=2;
 }
 
 void right(int vel){
@@ -149,15 +140,6 @@ void idle(){
     digitalWrite(engine_r_b,0);
     digitalWrite(engine_l_f,0);  
     digitalWrite(engine_r_f,0);
-}
-void cam_l(){
-    holdingRegs[pos_servo]-=1;
-    servoMotor.write(holdingRegs[pos_servo]);
-}
-
-void cam_r(){
-    holdingRegs[pos_servo]+=1;
-    servoMotor.write(holdingRegs[pos_servo]);
 }
 
 
@@ -181,18 +163,7 @@ void loop() {
           }
        }
      }
-     if(holdingRegs[CAM_L])cam_l();
-     if(holdingRegs[CAM_R])cam_r();
-  }
-     
-     dht11.read(humi, temp);
-     holdingRegs[temperature] = temp;
-     holdingRegs[humidity] = humi;
-    
-   
-   
-   
-     
+  }     
 }
 
 unsigned int slave_update(unsigned int *holdingRegs)

@@ -9,7 +9,7 @@ import fcntl
 import struct
 PATH_rt4all_frame = osPath.dirname(osPath.realpath(__file__))
 sysPath.append( PATH_rt4all_frame  + '/RT4all_protocol/')
-
+import time
 import rt4all_protocol as protocol
 import rt4all_frame as frame
 import register_robot as reg
@@ -20,9 +20,12 @@ f = frame.Frame(protocol.RT4all_protocol())
 
 from socket import *
 def create_brain():
+	f.raw_write_registers(reg.GO, 1)
+	time.sleep(0.2)
+	f.raw_write_registers(reg.GO, 0)
 	s = socket(AF_INET, SOCK_STREAM)
 	s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
-	s.bind(("", 1234))
+	s.bind(("", 1235))
 	s.listen(1)
 	conn, addr = s.accept()
 	print 'Incoming connection'
@@ -47,35 +50,7 @@ def create_brain():
 		elif data == '_back':
 			print '_back'
 			f.raw_write_registers(reg.BACK, 0)
-		elif data == 'left':
-			print 'left'
-			f.raw_write_registers(reg.LEFT, 1)
-		elif data == '_left':
-			print '_left'
-			f.raw_write_registers(reg.LEFT, 0)
-		elif data == 'right':
-			print 'right'
-			f.raw_write_registers(reg.RIGHT, 1)
-		elif data == '_right':
-			print '_right'
-			f.raw_write_registers(reg.RIGHT, 0)
-		elif data == 'cam_l':
-			print 'cam_l'
-			pos = f.raw_read_registers(reg.pos_servo,1)
-			if pos :
-				new_pos=pos[0]+10
-			if new_pos > 170:
-				new_pos=170
-			f.raw_write_registers(reg.pos_servo,new_pos )
-		elif data == 'cam_r':
-			print 'cam_r'
-			pos = f.raw_read_registers(reg.pos_servo,1)
-			if pos :
-				new_pos=pos[0]-10
-			if new_pos < 10:
-				new_pos=10
-			f.raw_write_registers(reg.pos_servo, new_pos)
-
+		
 			
 		
 	conn.close()
