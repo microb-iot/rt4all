@@ -17,6 +17,7 @@ app.on('ready', () => {
 	});
 	machine_selector_window.loadURL('file://' + __dirname + '/template/machine_selector.html');
 	machine_selector_window.setPosition(20, 80);
+	//machine_selector_window.webContents.openDevTools();
 	machine_selector_window.on('closed', () => {
   		app.quit()
 	})
