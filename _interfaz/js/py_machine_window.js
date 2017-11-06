@@ -18,11 +18,11 @@ var nodeConsole = require('console');
 var myConsole = new nodeConsole.Console(process.stdout, process.stderr);
 
 var exec = require('child_process').exec;
-var stream;
+var stream,open_pdf;
 
 // Dictionary for the pressed keys and their unpressed code
-var key_list = {"W":"go","A":"left","S":"back","D":"right","Q":"scoop", "O":"cam_l", "P":"cam_r","9":"Goodbye"};
-var key_unpressed = {"W":"_go","A":"_left","S":"_back","D":"_right","Q":"_scoop", "O":"_cam_l", "P":"_cam_r","9":"_Goodbye"};
+var key_list = {"W":"go","A":"left","S":"back","D":"right","Q":"scoop_up", "E":"scoop_down", "O":"cam_l", "P":"cam_r","9":"Goodbye"};
+var key_unpressed = {"W":"_go","A":"_left","S":"_back","D":"_right","Q":"_scoop_up", "E":"_scoop_down", "O":"_cam_l", "P":"_cam_r","9":"_Goodbye"};
 var key_pressed_ant = "";
 
 // DOM functions
@@ -128,8 +128,10 @@ function send_key_pressed(key_pressed){
 function start_stream(){
 	var nodeConsole = require('console');
   	var myConsole = new nodeConsole.Console(process.stdout, process.stderr);
-
-	stream = exec('gst-launch-1.0 udpsrc port=5000 ! application/x-rtp,encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec ! autovideosink', function(error, stdout, stderr) {
+// gst-launch-1.0 udpsrc port=4200 ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! textoverlay text="Robot" ! fpsdisplaysink sync=false text-overlay=false
+// gst-launch-1.0 udpsrc port=5000 ! application/x-rtp,encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec ! autovideosink
+myConsole.log("INICIO STREAM");
+	stream = exec('gst-launch-1.0 udpsrc port=4200 ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! textoverlay text="Robot" ! fpsdisplaysink sync=false text-overlay=false', function(error, stdout, stderr) {
     //myConsole.log('stdout: ' + stdout);
     //myConsole.log('stderr: ' + stderr);
     if (error !== null) {
@@ -174,6 +176,8 @@ function generate_report(){
     if (err){
         throw err;
     };
+    open_pdf = exec('xdg-open '+__dirname+'/../report/pdf/LAG.pdf');
     myConsole.log('finished');
   });
+
 }

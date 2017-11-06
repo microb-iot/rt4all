@@ -31,7 +31,7 @@ ipcMain.on( "new_robot_window", ( e, arg ) => {
 	});
     //machine_window.webContents.send('data-id', arg);
 	machine_window.loadURL('file://' + __dirname + '/template/machine_window.html?'+arg);
-	machine_window.webContents.openDevTools();
+	//machine_window.webContents.openDevTools();
 	machine_window.setPosition(400,5);
 } );
 
