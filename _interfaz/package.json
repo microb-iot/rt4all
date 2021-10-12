@@ -6,7 +6,7 @@
     "start": "electron ."
   },
   "devDependencies": {
-    "electron": "^1.7.9",
+    "electron": "^11.5.0",
     "jsdoc": "^3.5.5"
   },
   "dependencies": {
